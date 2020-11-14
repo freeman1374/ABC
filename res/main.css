@@ -1,0 +1,73 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+div.float {
+	float: left;
+}
+/* div.float p {text-align: center;} */
+
+canvas {
+	background: #eee;
+	display: block;
+	margin: 0 auto;
+}
+
+.ElumCf {
+    /* 
+	float: left;
+    width: 57.142857142857139%;
+	 */
+    width: 50vw;
+    position: absolute;
+    /* top: 50%; */
+    left: 25%;
+}
+
+.HOoTuc, .ElumCf {
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+table {
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    border-spacing: 2px;
+    border-color: grey;
+}
+
+.PaQdxb {
+    cursor: pointer;
+    font-family: arial,sans-serif;
+    text-align: center;
+    line-height: 34px;
+    margin: 4px;
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 4px;
+    -webkit-touch-action: manipulation;
+}
+
+.A2W7l {
+    font-size: 14px;
+}
+
+.AOvabd, .dxp44d {
+    background: #f1f3f4;
+    color: #202124;
+    border: 1px solid #f1f3f4;
+    border-radius: 4px;
+}
+.MEdqYd, .feqqG {
+    background: #dadce0;
+    color: #202124;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.XRsWPe {
+    outline: none;
+}
