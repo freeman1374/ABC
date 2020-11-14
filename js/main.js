@@ -80,9 +80,11 @@ function ButtonOnClick(input) {
 		}
 		break;
 		case 'AC':
-		inputVal = "";
-		
-		console.log("ButtonOnClick() AC inputVal = "+inputVal);
+			if (""!=inputVal) {
+				inputVal = "";
+				drawQ();
+				console.log("ButtonOnClick() AC inputVal = "+inputVal);
+			}
 		break;
 		
 		case 'Exit':
