@@ -23,6 +23,7 @@ canvas {
     position: absolute;
     /* top: 50%; */
     left: 5vw;
+	font-size: xxx-large;
 }
 
 .HOoTuc, .ElumCf {
@@ -51,21 +52,25 @@ table {
 }
 
 .A2W7l {
-    font-size: 14px;
+    /* font-size: 14px; */
 }
 
 .AOvabd, .dxp44d {
     background: #f1f3f4;
     color: #202124;
-    border: 1px solid #f1f3f4;
+    border: 7px solid #f1f3f4;
     border-radius: 4px;
+    font-size: xxx-large;
+    height: 39px;
 }
 .MEdqYd, .feqqG {
     background: #dadce0;
     color: #202124;
-    border: 1px solid #dadce0;
+    border: 10px solid #dadce0;
     border-radius: 4px;
     box-sizing: border-box;
+	font-size: xxx-large;
+    height: 52px;
 }
 
 .XRsWPe {
