@@ -19,10 +19,10 @@ canvas {
 	float: left;
     width: 57.142857142857139%;
 	 */
-    width: 50vw;
+    width: 90vw;
     position: absolute;
     /* top: 50%; */
-    left: 25%;
+    left: 5vw;
 }
 
 .HOoTuc, .ElumCf {

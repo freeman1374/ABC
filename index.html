@@ -1,20 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<script type="text/javascript" src="./jquery/jquery-3.5.1.js"></script>
+<link rel="stylesheet" type="text/css" href="./res/main.css">
+<meta charset="utf-8" />
+<title>ABC</title>
 </head>
 <body>
-<div id='add'>
-<a>+</a>
-</div>
-<div id='subtract'>
-<a>-</a>
-</div>
-<div id='multiply '>
-<a>×</a>
-</div>
-<div id='divided'>
-<a>÷</a>
-</div>
+
+<canvas id="mainCanvas" width="1800px" height="800px"></canvas>
+
+<table class="ElumCf">
+<tbody>
+	<tr>
+	<td> <div class="PaQdxb A2W7l"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('Esc')" role="button" tabindex="0" aria-label="退出">退出</div> </div> </td>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('Exit')" role="button" tabindex="0" aria-label="完成">完成</div> </div></td>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('Note')" role="button" tabindex="0" aria-label="速記">速記</div> </div> </td>
+	<td>  <div class="PaQdxb UpZIS"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('AC')" role="button" tabindex="0" aria-label="全部清除">清除輸入</div>
+	</td>
+	</tr>
+	<tr>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(7)" role="button" tabindex="0">7</div> </div> </td>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(8)" role="button" tabindex="0">8</div> </div> </td>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(9)" role="button" tabindex="0">9</div> </div> </td>
+	<td>  <div class="PaQdxb mF5fo"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('÷')" role="button" tabindex="0" aria-label="除">÷</div> </div> </td>
+	</tr>
+	<tr>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(4)" role="button" tabindex="0">4</div> </div> </td>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(5)" role="button" tabindex="0">5</div> </div> </td>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(6)" role="button" tabindex="0">6</div> </div> </td>
+	<td>  <div class="PaQdxb mF5fo"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('×')" role="button" tabindex="0" aria-label="乘">×</div> </div> </td>
+	</tr>
+	<tr>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(1)" role="button" tabindex="0">1</div> </div></td>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(2)" role="button" tabindex="0">2</div> </div> </td>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(3)" role="button" tabindex="0">3</div> </div> </td>
+	<td>  <div class="PaQdxb mF5fo"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('-')" role="button" tabindex="0" aria-label="減">−</div> </div> </td>
+	</tr>
+	<tr>
+	<td>  <div class="PaQdxb mF5fo G7BHUb"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick('.')" role="button" tabindex="0" aria-label="點">.</div> </div> </td>
+	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(0)" role="button" tabindex="0">0</div> </div> </td>
+	<td>  <div class="PaQdxb mF5fo G7BHUb"> <div  class="XRsWPe MEdqYd" onclick="ButtonOnClick('Enter')" role="button" tabindex="0" aria-label="Enter">Enter</div> </div> </td>
+	<td>  <div class="PaQdxb mF5fo"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('+')" role="button" tabindex="0" aria-label="加">+</div> </div> </td>
+	</tr>
+</tbody>
+</table>
+
+<script type="text/javascript" src="./js/main.js"></script>
+<script type="text/javascript" src="./js/draw.js"></script>
+
 </body>
 </html>

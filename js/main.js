@@ -1,6 +1,3 @@
-var mainCanvasName = "mainCanvas";
-var canvas = document.getElementById(mainCanvasName);
-var ctx = canvas.getContext("2d");
 var inputVal = "";
 
 var setupType = "";
@@ -10,8 +7,8 @@ var setupLen2 = 0;
 var runTimer;
 var screenTimer;
 
-let questionArray = new Array();
-let answerArray = new Array();
+var questionArray = new Array();
+var answerArray = new Array();
 
 let lockKey = false;
 
@@ -44,25 +41,16 @@ function setFunc() {
 }
 
 $(function(){
-// do something
-	ctx.beginPath();
+	initctx();
 	FastScreen();
 	resetQ();
 });
-
-function FastScreen() {
-	ctx.fillStyle = "#000000";
-	ctx.font = "60px Arial";
-	ctx.fillText("輸入 + - × ÷ 選擇", 150, 200);
-	ctx.closePath();
-}
 
 function ButtonOnClick(input) {
 	
 	if (true==lockKey) return;
 	
-	switch (input) {
-		
+	switch (input) {		
 		case 1:
 		case 2:
 		case 3:
@@ -70,10 +58,12 @@ function ButtonOnClick(input) {
 			if (0==setupLen1 && 0!=setupType.length) {
 				setupLen1 = input;
 				console.log("ButtonOnClick() setupLen1 = "+setupLen1);
+				ShowSetupInfo();
 				break;
-			} else if (0==setupLen2 && 0!=setupType.length) {
+			} else if (0==setupLen2 && 0!=setupType.length && input<=setupLen1) {
 				setupLen2 = input;
 				console.log("ButtonOnClick() setupLen2 = "+setupLen2);
+				ShowSetupInfo();
 				break;
 			}
 		case 0:
@@ -82,9 +72,11 @@ function ButtonOnClick(input) {
 		case 7:
 		case 8:
 		case 9:
-		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 4>inputVal.length) {
+		case '.':
+		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 12>inputVal.length) {
 			inputVal = inputVal+input;
 			console.log("ButtonOnClick() inputVal = "+inputVal);
+			drawQ();
 		}
 		break;
 		case 'AC':
@@ -104,6 +96,9 @@ function ButtonOnClick(input) {
 		case 'Esc':
 			if (confirm("確定離開")) {
 				resetQ();
+				ShowSetupInfo();
+				clearFastScreen();
+				FastScreen();
 				console.log("ButtonOnClick() Esc");
 			}
 		break;
@@ -145,17 +140,20 @@ function ButtonOnClick(input) {
 		case '-':
 		case '×':
 		case '÷':
-		setupType = input;
-		console.log("ButtonOnClick() "+input);
+			if (0==setupType.length) {
+				setupType = input;
+				ShowSetupInfo();
+			}
+			console.log("ButtonOnClick() "+input);
 		break;
 		default:
-		console.log('out of ${input}.');
+			console.log('out of ${input}.');
 		break;
 	}
 }
 
 function getRandom(min,max){
-	return Math.floor(Math.random()*max)+min;
+	return Math.floor(Math.random()*(max-min+1))+min;
 };
 
 function resetQ() {
@@ -213,4 +211,55 @@ function AskQuestion() {
 	
 	console.log('Question '+val_1+setupType+val_2+" ?");
 	questionArray.push([val_1, val_2]);
+	drawQ();
+}
+
+function GenJsonTable () {
+	var jsonObj=[]; 
+	var tempPrdList=[];
+	 
+	tempPrdList.push("12");
+	tempPrdList.push("34");
+	tempPrdList.push("56");
+	 
+	for (i = 0, j = tempPrdList.length; i < j; i++) {
+	  var obj = new Object;
+	  obj.id = tempPrdList[i];  //key=id
+	  jsonObj.push(obj);
+	}
+	 
+	console.log(JSON.stringify(jsonObj));  //[{"id":"12"},{"id":"34"},{"id":"56"}]
+}
+
+
+function GenJsonTable () {
+	var jsonObj=[]; 
+	var tempPrdList=[];
+	 
+	tempPrdList.push("12");
+	tempPrdList.push("34");
+	tempPrdList.push("56");
+	 
+	for (i = 0, j = tempPrdList.length; i < j; i++) {
+	  var obj = new Object;
+	  obj.id = tempPrdList[i];  //key=id
+	  jsonObj.push(obj);
+	}
+	 
+	console.log(JSON.stringify(jsonObj));  //[{"id":"12"},{"id":"34"},{"id":"56"}]
+}
+
+function ustLocalStorageSetItem(key, val) {
+	localStorage.setItem(key, value)
+	//sessionStorage.setItem(key, value)
+}
+
+function ustLocalStorageGetItem(key) {
+	localStorage.getItem(key)
+	//sessionStorage.getItem(key)
+}
+
+function ustLocalStorageRemoveItem(key) {
+	localStorage.removeItem(key)
+	//sessionStorage.removeItem(key)
 }
