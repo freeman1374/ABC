@@ -1,18 +1,20 @@
 var inputVal = "";
+var noteInputVal = "";
 
 var setupType = "";
 var setupLen1 = 0;
 var setupLen2 = 0;
 
-var runTimer;
-var screenTimer;
+/* var runTimer;
+var screenTimer; */
 
 var questionArray = new Array();
 var answerArray = new Array();
-
+let note = false;
 let lockKey = false;
+let DataKey= "ABC_Data"
 
-function setFunc() {
+/* function setFunc() {
 //	var d = new Date();
 //	console.log(d.toLocaleTimeString());
 	
@@ -36,14 +38,15 @@ function setFunc() {
 		console.log("輸入長度2");
 		clearInterval(runTimer);
 		runTimer = null;
-		AskQuestion();
+		//AskQuestion();
 	}
 }
-
+ */
 $(function(){
+	$('#dmsg').hide();
 	initctx();
 	FastScreen();
-	resetQ();
+	resetQ();	
 });
 
 function ButtonOnClick(input) {
@@ -64,6 +67,8 @@ function ButtonOnClick(input) {
 				setupLen2 = input;
 				console.log("ButtonOnClick() setupLen2 = "+setupLen2);
 				ShowSetupInfo();
+				$('#Exit').html('完成');
+				AskQuestion();
 				break;
 			}
 		case 0:
@@ -73,7 +78,11 @@ function ButtonOnClick(input) {
 		case 8:
 		case 9:
 		case '.':
-		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>inputVal.length) {
+		if (true==note && 0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>noteInputVal.length) {
+			noteInputVal = noteInputVal+input;
+			console.log("ButtonOnClick() noteInputVal = "+noteInputVal);
+			drawQ();
+		} else if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>inputVal.length) {
 			inputVal = inputVal+input;
 			console.log("ButtonOnClick() inputVal = "+inputVal);
 			drawQ();
@@ -83,20 +92,56 @@ function ButtonOnClick(input) {
 			if (""!=inputVal) {
 				inputVal = "";
 				drawQ();
-				console.log("ButtonOnClick() AC inputVal = "+inputVal);
+				console.log("ButtonOnClick() clear inputVal");
+			} else if (""!=noteInputVal) {
+				noteInputVal = "";
+				drawQ();
+				console.log("ButtonOnClick() clear noteInputVal");
+			}
+		break;
+		
+		case 'Note':
+			if (""!=inputVal || ""!=noteInputVal) {
+				if (note) {
+					note = false;
+					document.getElementById('buttonNote').style.color = '#000000';
+				} else {
+					if (""==noteInputVal) {
+						noteInputVal = inputVal;
+					}
+					note = true;
+					document.getElementById('buttonNote').style.color = 'red';
+				}
+				drawQ();
+				console.log("ButtonOnClick() note = "+note);
 			}
 		break;
 		
 		case 'Exit':
-			if (confirm("確定結算?")) {
-				
-				resetQ();
-				console.log("ButtonOnClick() Exit");
+			if (0<answerArray.length) {
+				if (confirm("確定結算?")) {
+					GenJsonTable(true);
+					//resetQ();
+					console.log("ButtonOnClick() Exit");
+				}
+			} else {
+				let rawData = ustLocalStorageGetItem(DataKey);
+				if(rawData) {
+					try {
+						let jsonString = JSON.parse(rawData);
+						showMsgDisplay(jsonString);
+					} catch(e) {
+						alert(e); // error in the above string (in this case, yes)!
+					}
+				}	
 			}
 		break;
 		
 		case 'Esc':
 			if (confirm("確定離開")) {
+				if (0<answerArray.length)
+					GenJsonTable(false);
+				
 				resetQ();
 				ShowSetupInfo();
 				clearFastScreen();
@@ -107,7 +152,7 @@ function ButtonOnClick(input) {
 		case 'Enter':
 			let index = questionArray.length;
 			let ret = false;
-			if (0!=index && setupLen1 != 0 && setupLen2 != 0 && inputVal!="") {
+			if (0!=index && setupLen1 != 0 && setupLen2 != 0 && inputVal!="" && true!=note) {
 				let v1 = questionArray[index-1][0];
 				let v2 = questionArray[index-1][1];
 				
@@ -132,7 +177,7 @@ function ButtonOnClick(input) {
 				} else {
 					console.log("ButtonOnClick() wrong answer");
 				}
-				inputVal = "";
+				noteInputVal = inputVal = "";
 				AskQuestion();
 			} else {
 				console.log("ButtonOnClick() Enter");
@@ -159,13 +204,14 @@ function getRandom(min,max){
 };
 
 function resetQ() {
-	clearInterval(runTimer);
+	$('#Exit').html('上次紀錄');
+	//clearInterval(runTimer);
 	setupType = "";
 	setupLen1 = 0;
 	setupLen2 = 0;
 	questionArray = new Array();
 	answerArray = new Array();
-	runTimer = setInterval(setFunc, 1000);
+	//runTimer = setInterval(setFunc, 1000);
 }
 
 function AskQuestion() {
@@ -213,37 +259,55 @@ function AskQuestion() {
 	
 	console.log('Question '+val_1+setupType+val_2+" ?");
 	questionArray.push([val_1, val_2, setupType]);
+	noteInputVal = "";
 	drawQ();
 }
 
-function GenJsonTable () {
-	var jsonObj=[]; 
-	var tempPrdList=[];
-	 
-	tempPrdList.push("12");
-	tempPrdList.push("34");
-	tempPrdList.push("56");
-	 
-	for (i = 0, j = tempPrdList.length; i < j; i++) {
-	  var obj = new Object;
-	  obj.id = tempPrdList[i];  //key=id
-	  jsonObj.push(obj);
+function GenJsonTable(showUITable) {
+	let questionArrayLen = questionArray.length;
+	let answerArrayLen = answerArray.length;
+	let jsonObj=[];
+	let correctAnswer = 0;
+	if (answerArrayLen == (questionArrayLen-1)) {
+		for (let index=0;index<answerArrayLen;index++) {
+			var obj = new Object;
+			obj.Question = questionArray[index][0] + questionArray[index][2] + questionArray[index][1];
+			obj.Answer = answerArray[index][0];
+			obj.CorrectAnswer = answerArray[index][1];
+			if (true==answerArray[index][1]) {
+				correctAnswer++;
+			}
+			jsonObj.push(obj);
+		}
+		//console.log(JSON.stringify(jsonObj));
+		
+		let score = 100/answerArrayLen;
+		let TotalScore = score*correctAnswer;
+		var ScoreObject = new Object;
+		ScoreObject.Table = jsonObj;
+		ScoreObject.TotalScore = TotalScore;
+		let jsonBuf = JSON.stringify(ScoreObject)
+		//console.log(jsonBuf);
+		if (showUITable)
+			showMsgDisplay(ScoreObject);
+		
+		ustLocalStorageSetItem(DataKey, jsonBuf)
+	} else {
+		console.log("Data Error!!");
 	}
-	 
-	console.log(JSON.stringify(jsonObj));  //[{"id":"12"},{"id":"34"},{"id":"56"}]
 }
 
-function ustLocalStorageSetItem(key, val) {
-	localStorage.setItem(key, value)
+function ustLocalStorageSetItem(key, value) {
+	localStorage.setItem(key, value);
 	//sessionStorage.setItem(key, value)
 }
 
 function ustLocalStorageGetItem(key) {
-	localStorage.getItem(key)
+	return localStorage.getItem(key);
 	//sessionStorage.getItem(key)
 }
 
 function ustLocalStorageRemoveItem(key) {
-	localStorage.removeItem(key)
+	localStorage.removeItem(key);
 	//sessionStorage.removeItem(key)
 }

@@ -149,10 +149,15 @@ function drawQ() {
 	drawTextInBox(questionArray[qIndex][2], "#00A0CF", 'Arial', nowSymbolW, symbolH, LwordWp, LwordHp);
 	drawTextInBox(questionArray[qIndex][0], "#000", 'Arial', nowQ_TextW-calcTextW(LwordWp, questionArray[qIndex][0]), Q_TextH_L1, calcTextW(LwordWp, questionArray[qIndex][0]), LwordHp);
 	drawTextInBox(questionArray[qIndex][1], "#000", 'Arial', nowQ_TextW-calcTextW(LwordWp, questionArray[qIndex][1]), Q_TextH_L2, calcTextW(LwordWp, questionArray[qIndex][1]), LwordHp);
-	ansLen = calcTextW(LwordWp, inputVal)
-	if (drawWp500<ansLen) ansLen = drawWp500;
-	drawTextInBox(inputVal, "#000", 'Arial', nowQ_TextW-ansLen, Q_TextH_L3, ansLen, LwordHp);
-
+	if (note) {
+		ansLen = calcTextW(LwordWp, noteInputVal)
+		if (drawWp500<ansLen) ansLen = drawWp500;
+		drawTextInBox(noteInputVal, "#0A40CF", 'Arial', nowQ_TextW-ansLen, Q_TextH_L3, ansLen, LwordHp);
+	} else {
+		ansLen = calcTextW(LwordWp, inputVal)
+		if (drawWp500<ansLen) ansLen = drawWp500;
+		drawTextInBox(inputVal, "#000", 'Arial', nowQ_TextW-ansLen, Q_TextH_L3, ansLen, LwordHp);
+	}
 }
 
 function drawTextInBox(txt, fillStyle, font, x, y, w, h, angle) {
@@ -174,3 +179,33 @@ function drawTextInBox(txt, fillStyle, font, x, y, w, h, angle) {
 	ctx.restore();
 }
 
+function ExitMsgDisplay() {
+	$('#dmsg').hide();
+}
+
+function showMsgDisplay(data) {
+	console.log(data);
+	let trItemHead;
+	let i;
+	let infoLen = Object.keys(data.Table).length;
+	$("#tbody_makeEditable").html("");
+	$("#TotalScore").html("總分 : "+data.TotalScore);
+	
+	for (i=0;i<infoLen;i++) {
+		if((i % 2)==0){
+			trItemHead = "<tr id=\""+i+"\" bgcolor=\"#ededed\" >";
+		} else {
+			trItemHead = "<tr id=\""+i+"\">";			
+		}
+		$('#tbody_makeEditable').append(
+				trItemHead+
+				'<td class="tdval">'+ (i+1) +"</td>"+
+				'<td class="tdval">'+ data.Table[i].Question +"</td>"+
+				'<td class="tdval">'+ data.Table[i].Answer +"</td>"+
+				'<td class="tdval">'+ data.Table[i].CorrectAnswer +"</td>"+
+				"</tr>");
+	}
+	
+	$('#dmsg').show();
+	
+}

@@ -76,3 +76,39 @@ table {
 .XRsWPe {
     outline: none;
 }
+
+#dmsg {
+	float: left;
+    background: #dadce0;
+    width: 100vw;
+    height: 92vh;
+    font-size: x-large;
+    z-index: 99999;
+    position: absolute;
+}
+
+#TotalScore {
+	width: 90vw;
+    position: absolute;
+    /* top: 50%; */
+    left: 5vw;
+    font-size: x-large;
+}
+
+.table-bordered {
+	width: 90vw;
+    position: relative;
+    top: 5vh;
+    left: 5vw;
+    font-size: x-large;
+}
+
+.buttonExitMsgDisplay {
+	position: absolute;
+    /* top: 5vh; */
+    left: 5vw;
+    width: 21vw;
+    height: 4vh;
+    font-size: xx-large;
+    bottom: 10vh;
+}

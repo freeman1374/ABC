@@ -8,14 +8,32 @@
 </head>
 <body>
 
+<div id="dmsg" >
+<p id="TotalScore"></p>
+<table class="table table-bordered">
+	<thead>
+		<tr class="tableTr">
+		<th class="tableTh" id="table_Index">#</th>
+		<th class="tableTh" id="table_Auestion">問題</th>
+		<th class="tableTh" id="table_Ans">答案</th>
+		<th class="tableTh" id="table_C">答對</th>
+		</tr>
+	</thead>
+	<tbody class="table table-bordered" id= "tbody_makeEditable">
+	<!-- tr/td -->
+	</tbody>
+</table>
+<button class="buttonExitMsgDisplay" type="button" onclick="ExitMsgDisplay()" >退出</button>
+</div>
+
 <canvas id="mainCanvas" width="1000px" height="800px"></canvas>
 
 <table class="ElumCf">
 <tbody>
 	<tr>
 	<td> <div class="PaQdxb A2W7l"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('Esc')" role="button" tabindex="0" aria-label="退出">退出</div> </div> </td>
-	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('Exit')" role="button" tabindex="0" aria-label="完成">完成</div> </div></td>
-	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('Note')" role="button" tabindex="0" aria-label="速記">速記</div> </div> </td>
+	<td>  <div class="PaQdxb A2W7l"> <div id="Exit" class="XRsWPe MEdqYd" onclick="ButtonOnClick('Exit')" role="button" tabindex="0" aria-label="完成"></div> </div></td>
+	<td>  <div class="PaQdxb A2W7l"> <div id="buttonNote" class="XRsWPe MEdqYd" onclick="ButtonOnClick('Note')" role="button" tabindex="0" aria-label="速記">速記</div> </div> </td>
 	<td>  <div class="PaQdxb UpZIS"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('AC')" role="button" tabindex="0" aria-label="全部清除">清除輸入</div>
 	</td>
 	</tr>
