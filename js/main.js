@@ -73,7 +73,7 @@ function ButtonOnClick(input) {
 		case 8:
 		case 9:
 		case '.':
-		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 12>inputVal.length) {
+		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>inputVal.length) {
 			inputVal = inputVal+input;
 			console.log("ButtonOnClick() inputVal = "+inputVal);
 			drawQ();
@@ -107,7 +107,7 @@ function ButtonOnClick(input) {
 		case 'Enter':
 			let index = questionArray.length;
 			let ret = false;
-			if (0!=index && setupLen1 != 0 && setupLen2 != 0) {
+			if (0!=index && setupLen1 != 0 && setupLen2 != 0 && inputVal!="") {
 				let v1 = questionArray[index-1][0];
 				let v2 = questionArray[index-1][1];
 				
@@ -212,27 +212,9 @@ function AskQuestion() {
 	}
 	
 	console.log('Question '+val_1+setupType+val_2+" ?");
-	questionArray.push([val_1, val_2]);
+	questionArray.push([val_1, val_2, setupType]);
 	drawQ();
 }
-
-function GenJsonTable () {
-	var jsonObj=[]; 
-	var tempPrdList=[];
-	 
-	tempPrdList.push("12");
-	tempPrdList.push("34");
-	tempPrdList.push("56");
-	 
-	for (i = 0, j = tempPrdList.length; i < j; i++) {
-	  var obj = new Object;
-	  obj.id = tempPrdList[i];  //key=id
-	  jsonObj.push(obj);
-	}
-	 
-	console.log(JSON.stringify(jsonObj));  //[{"id":"12"},{"id":"34"},{"id":"56"}]
-}
-
 
 function GenJsonTable () {
 	var jsonObj=[]; 

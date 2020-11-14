@@ -1,34 +1,41 @@
-let drawW = 1800;
+let drawW = 1000;
 let drawH = 800;
 
 let drawWp = drawW/1000;
 let drawHp = drawH/1000;
 
+let XLwordWp = 160;
+let XLwordHp = 160;
 let LwordWp = 70;
-let LwordHp = 70;
+let LwordHp = 130;
 let MwordWp = 60;
-let MwordHp = 60;
+let MwordHp = 90;
 let SwordWp = 50;
-let SwordHp = 50;
+let SwordHp = 70;
+
+//fillRect(x, y, width, height)           畫一個實心的矩形
+//clearRect(x, y, width, height)          清除一塊兒矩形區域
+//strokeRect(x, y, width, height)         畫一個帶邊框的矩形
+//rect(x, y, width, height)               直接畫一個矩形
 
 function calcTextW(wordW, string) {
 	let textW = wordW;
-	let textWMax = 2000;
+	let textWMax = 1000;
 	let textWtmp;
 	let stringLength;
 	if (isNaN(string.length)) {
 		stringLength = string.toString().length;
-		console.log("1 stringLength : "+stringLength);
+		//console.log("1 stringLength : "+stringLength);
 	} else {
 		stringLength = string.length;
-		console.log("2 stringLength : "+stringLength);
+		//console.log("2 stringLength : "+stringLength);
 	}
 	
 	textWtmp = textW*stringLength;
 	if (textWtmp>textWMax) {
 		textWtmp = textWMax;
 	}
-	console.log("stringLength : "+stringLength +" textWtmp :"+textWtmp);
+	//console.log("stringLength : "+stringLength +" textWtmp :"+textWtmp);
 	return textWtmp;
 }
 
@@ -92,24 +99,32 @@ function clearFastScreen() {
 	ctx.clearRect(drawWp*4, drawHp*4, drawWp*(994), drawHp*(994));
 }
 
-//fillRect(x, y, width, height)           畫一個實心的矩形
-//clearRect(x, y, width, height)          清除一塊兒矩形區域
-//strokeRect(x, y, width, height)         畫一個帶邊框的矩形
-//rect(x, y, width, height)               直接畫一個矩形
-
-
-
 function drawQ() {
-	ctx.clearRect(drawWp*4, drawHp*60, drawWp*(994), drawHp*(936));
+	ctx.clearRect(drawWp*4, drawHp*SwordHp+20, drawWp*(994), drawHp*(980-SwordHp));
 	let qIndex = -1;
 	let aIndex = -1;
-	let nowQ_baseline_x = 134;
-	let nowQ_baseline_y = 570;
-	let preQ_baseline_x = 1000;
-	let preQ_baseline_y = 570;
-	let baselineW = 700;
-	let baselineH = 5;
 	
+	let nowQ_TextW = drawWp*444;
+	let nowQ_baseline_x = drawWp*54;
+	let nowQ_baseline_y = drawHp*546;
+	let preQ_TextW = drawWp*984;
+	
+	let preQ_baseline_x = drawWp*590;
+	let preQ_baseline_y = drawHp*546;
+	
+	let Q_TextH_L1 = drawHp*170;
+	let Q_TextH_L2 = drawHp*354;
+	let Q_TextH_L3 = drawHp*574;
+	
+	let baselineW = drawWp*406;
+	let baselineH = drawHp*6;
+	
+	let nowSymbolW = drawWp*46;
+	let preSymbolW = drawWp*586;
+	let symbolH = drawHp*435;
+	
+	let ansLen;
+	let drawWp500 = drawWp*450;
 	if (0!=questionArray.length) {
 		qIndex = questionArray.length-1;
 	} else {
@@ -122,16 +137,22 @@ function drawQ() {
 	if (0<=qIndex-1) {
 		ctx.fillStyle = "#00A0CF";
 		ctx.fillRect(preQ_baseline_x, preQ_baseline_y, baselineW, baselineH);
-		drawTextInBox(questionArray[qIndex-1][0], "#000", 'Arial', 1695-calcTextW(LwordWp, questionArray[qIndex-1][0]), 255, calcTextW(LwordWp, questionArray[qIndex-1][0]), 145);
-		drawTextInBox(questionArray[qIndex-1][1], "#000", 'Arial', 1695-calcTextW(LwordWp, questionArray[qIndex-1][1]), 430, calcTextW(LwordWp, questionArray[qIndex-1][1]), 145);
-		drawTextInBox(answerArray[qIndex-1][0], "#000", 'Arial', 1695-calcTextW(LwordWp, answerArray[qIndex-1][0]), 582, calcTextW(LwordWp, answerArray[qIndex-1][0]), 145);
+		drawTextInBox(questionArray[qIndex-1][2], "#00A0CF", 'Arial', preSymbolW, symbolH, LwordWp, LwordHp);
+		drawTextInBox(questionArray[qIndex-1][0], "#000", 'Arial', preQ_TextW-calcTextW(LwordWp, questionArray[qIndex-1][0]), Q_TextH_L1, calcTextW(LwordWp, questionArray[qIndex-1][0]), LwordHp);
+		drawTextInBox(questionArray[qIndex-1][1], "#000", 'Arial', preQ_TextW-calcTextW(LwordWp, questionArray[qIndex-1][1]), Q_TextH_L2, calcTextW(LwordWp, questionArray[qIndex-1][1]), LwordHp);
+		ansLen = calcTextW(LwordWp, answerArray[qIndex-1][0])
+		if (drawWp500<ansLen) ansLen = drawWp500;
+		drawTextInBox(answerArray[qIndex-1][0], "#000", 'Arial', preQ_TextW-ansLen, Q_TextH_L3, ansLen, LwordHp);
 	}
 	ctx.fillStyle = "#00A0CF";
 	ctx.fillRect(nowQ_baseline_x, nowQ_baseline_y, baselineW, baselineH);
-	drawTextInBox(questionArray[qIndex][0], "#000", 'Arial', 820-calcTextW(LwordWp, questionArray[qIndex][0]), 255, calcTextW(LwordWp, questionArray[qIndex][0]), 145);
-	drawTextInBox(questionArray[qIndex][1], "#000", 'Arial', 820-calcTextW(LwordWp, questionArray[qIndex][1]), 430, calcTextW(LwordWp, questionArray[qIndex][1]), 145);
-	inputVal.toString().length
-	drawTextInBox(inputVal, "#000", 'Arial', 820-calcTextW(LwordWp, inputVal), 582, calcTextW(LwordWp, inputVal), 145);
+	drawTextInBox(questionArray[qIndex][2], "#00A0CF", 'Arial', nowSymbolW, symbolH, LwordWp, LwordHp);
+	drawTextInBox(questionArray[qIndex][0], "#000", 'Arial', nowQ_TextW-calcTextW(LwordWp, questionArray[qIndex][0]), Q_TextH_L1, calcTextW(LwordWp, questionArray[qIndex][0]), LwordHp);
+	drawTextInBox(questionArray[qIndex][1], "#000", 'Arial', nowQ_TextW-calcTextW(LwordWp, questionArray[qIndex][1]), Q_TextH_L2, calcTextW(LwordWp, questionArray[qIndex][1]), LwordHp);
+	ansLen = calcTextW(LwordWp, inputVal)
+	if (drawWp500<ansLen) ansLen = drawWp500;
+	drawTextInBox(inputVal, "#000", 'Arial', nowQ_TextW-ansLen, Q_TextH_L3, ansLen, LwordHp);
+
 }
 
 function drawTextInBox(txt, fillStyle, font, x, y, w, h, angle) {
@@ -146,7 +167,7 @@ function drawTextInBox(txt, fillStyle, font, x, y, w, h, angle) {
 	ctx.save();
 	ctx.translate(x+w/2, y);
 	ctx.rotate(angle);
-	ctx.strokeRect(-w/2, 0, w, h);//框線
+	//ctx.strokeRect(-w/2, 0, w, h);//框線
 	ctx.scale(w / txtWidth, h / fontHeight);
 	ctx.translate(hMargin, 0)
 	ctx.fillText(txt, -txtWidth/2, 0);
