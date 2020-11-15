@@ -31,6 +31,7 @@ $(function(){
 	GetJsonArray();
 	resetQ();
 	$("#ScoreDataSelect").change(function(){
+	//$("#ScoreDataSelect").on('selectmenuchange',function (){
 		showMsgDisplay(null);
 	});
 });
@@ -343,10 +344,11 @@ function SetJsonArrayNewData(ScoreObject) {
 		}
 	}
 	
-	
-	if (ScoreJsonDisplayResArray[0].Table[Object.keys(ScoreJsonDisplayResArray[0].Table).length-1].AnswerDate == ScoreObject.Table[Object.keys(ScoreObject.Table).length-1].AnswerDate) {
-		console.log("SetJsonArrayNewData Exit.");
-		return;
+	if (0<ScoreJsonDisplayResArray.length && ScoreJsonDisplayResArray[0].hasOwnProperty('Table')) {
+		if (ScoreJsonDisplayResArray[0].Table[Object.keys(ScoreJsonDisplayResArray[0].Table).length-1].AnswerDate == ScoreObject.Table[Object.keys(ScoreObject.Table).length-1].AnswerDate) {
+			console.log("SetJsonArrayNewData Exit.");
+			return;
+		}
 	}
 	
 	if (false==toSave) {
@@ -413,8 +415,10 @@ function GetJsonArray() {
 	
 		
 	for (let selectAddIndex in ScoreJsonDisplayResArray) {
-		var itemDate = new Date(ScoreJsonDisplayResArray[selectAddIndex].UpDateTime+(8 * 3600 * 1000)).toISOString().slice(0, -5);
-		$("#ScoreDataSelect").append('<option value="'+selectAddIndex+'">'+itemDate+'</option>');
+		if(ScoreJsonDisplayResArray[selectAddIndex].hasOwnProperty("UpDateTime")) {
+			var itemDate = new Date(ScoreJsonDisplayResArray[selectAddIndex].UpDateTime+(8 * 3600 * 1000)).toISOString().slice(0, -5);
+			$("#ScoreDataSelect").append('<option value="'+selectAddIndex+'">'+itemDate+'</option>');
+		}
 	}
 	//console.log(ScoreJsonDisplayResArray);
 }

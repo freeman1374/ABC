@@ -229,31 +229,32 @@ function showMsgDisplay(data) {
 		let ScoreJsonindex = $("#ScoreDataSelect option:selected").val();
 		data = ScoreJsonDisplayResArray[ScoreJsonindex];
 	}
-	//console.log(data);
-	let trItemHead;
-	let i;
-	let infoLen = Object.keys(data.Table).length;
-	$("#tbody_makeEditable").html("");
-	$("#TotalScore").html("總分 : "+data.TotalScore);
-	
-	for (i=0;i<infoLen;i++) {
-		if((i % 2)==0){
-			trItemHead = "<tr id=\""+i+"\" bgcolor=\"#ededed\" >";
-		} else {
-			trItemHead = "<tr id=\""+i+"\">";			
+	if (data.hasOwnProperty("Table")) {
+		//console.log(data);
+		let trItemHead;
+		let i;
+		let infoLen = Object.keys(data.Table).length;
+		$("#tbody_makeEditable").html("");
+		$("#TotalScore").html("總分 : "+data.TotalScore);
+		
+		for (i=0;i<infoLen;i++) {
+			if((i % 2)==0){
+				trItemHead = "<tr id=\""+i+"\" bgcolor=\"#ededed\" >";
+			} else {
+				trItemHead = "<tr id=\""+i+"\">";			
+			}
+			$('#tbody_makeEditable').append(
+					trItemHead+
+					'<td class="tdval">'+ (i+1) +"</td>"+
+					'<td class="tdval">'+ data.Table[i].Question +"</td>"+
+					'<td class="tdval">'+ data.Table[i].Answer +"</td>"+
+					'<td class="tdval">'+ data.Table[i].CorrectAnswer +"</td>"+
+					'<td class="tdval">'+ data.Table[i].AnswerDate +"</td>"+
+					"</tr>");
 		}
-		$('#tbody_makeEditable').append(
-				trItemHead+
-				'<td class="tdval">'+ (i+1) +"</td>"+
-				'<td class="tdval">'+ data.Table[i].Question +"</td>"+
-				'<td class="tdval">'+ data.Table[i].Answer +"</td>"+
-				'<td class="tdval">'+ data.Table[i].CorrectAnswer +"</td>"+
-				'<td class="tdval">'+ data.Table[i].AnswerDate +"</td>"+
-				"</tr>");
+		
+		$('#dmsg').show();
 	}
-	
-	$('#dmsg').show();
-	
 }
 
 function ExitMsgDisplay() {
