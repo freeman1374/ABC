@@ -3,6 +3,12 @@
 	margin: 0;
 }
 
+canvas{
+	display: block;
+	width: 100vw;
+	height: 70vh;
+}
+
 div.float {
 	float: left;
 }
