@@ -50,7 +50,7 @@ function FastScreen() {
 	let showText = "輸入 + - × ÷ 選擇題目";
 	drawTextInBox(showText, "#204000", 'Arial',  drawWp*(1000/2)-(calcTextW(LwordWp, showText)/2), drawHp*(1000/2)-LwordHp/2, calcTextW(LwordWp, showText), LwordHp);
 	ctx.strokeRect(drawWp*2, drawHp*2, drawWp*(998), drawHp*(998));
-	$('#Exit').html('上次紀錄');
+	$('#Exit').html('查看紀錄');
 }
 
 function ShowSetupInfo() {
@@ -225,7 +225,11 @@ function ExitMsgDisplay() {
 }
 
 function showMsgDisplay(data) {
-	console.log(data);
+	if (null==data) {
+		let ScoreJsonindex = $("#ScoreDataSelect option:selected").val();
+		data = ScoreJsonDisplayResArray[ScoreJsonindex];
+	}
+	//console.log(data);
 	let trItemHead;
 	let i;
 	let infoLen = Object.keys(data.Table).length;
@@ -244,6 +248,7 @@ function showMsgDisplay(data) {
 				'<td class="tdval">'+ data.Table[i].Question +"</td>"+
 				'<td class="tdval">'+ data.Table[i].Answer +"</td>"+
 				'<td class="tdval">'+ data.Table[i].CorrectAnswer +"</td>"+
+				'<td class="tdval">'+ data.Table[i].AnswerDate +"</td>"+
 				"</tr>");
 	}
 	

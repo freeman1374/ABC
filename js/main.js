@@ -22,13 +22,17 @@ let DataKey = new Array("ABC_Data1", "ABC_Data2", "ABC_Data3", "ABC_Data4", "ABC
 						"ABC_Data6", "ABC_Data7", "ABC_Data8", "ABC_Data9", "ABC_Data10");
 
 let ScoreJsonArray;
+let ScoreJsonDisplayResArray;
 
 $(function(){
 	ExitMsgDisplay();
 	initctx();
 	FastScreen();
 	GetJsonArray();
-	resetQ();	
+	resetQ();
+	$("#ScoreDataSelect").change(function(){
+		showMsgDisplay(null);
+	});
 });
 
 function ButtonOnClick(input) {
@@ -100,24 +104,17 @@ function ButtonOnClick(input) {
 		
 		case 'Exit':
 			if (0<answerArray.length) {
-				CheckAns();
 				if (confirm("現在就檢視成績?")) {
 					GenJsonTable(true);
 					//resetQ();
 					console.log("ButtonOnClick() Exit");
 				}
 			} else {
-				/* let rawData = ustLocalStorageGetItem(DataKey);
-				if(rawData) {
-					try {
-						let jsonString = JSON.parse(rawData);
-						showMsgDisplay(jsonString);
-					} catch(e) {
-						alert(e); // error in the above string (in this case, yes)!
-					}
+				if (0<ScoreJsonDisplayResArray.length) {
+					showMsgDisplay(ScoreJsonDisplayResArray[0]);
 				} else {
 					alert("沒有紀錄");
-				} */
+				}
 			}
 		break;
 		
@@ -272,8 +269,9 @@ function CheckAns() {
 			}
 		}
 		
-		var now = new Date();
-		answerArray.push([inputAns, ret, now.toUTCString()]);
+		var now = new Date(+new Date() + 8 * 3600 * 1000);
+		//answerArray.push([inputAns, ret, now.toUTCString()]);
+		answerArray.push([inputAns, ret, now.toISOString().slice(0, -5)]);
 		
 		if (ret) {
 			console.log("ButtonOnClick() correct answer");
@@ -308,7 +306,7 @@ function GenJsonTable(showUITable) {
 		//console.log(JSON.stringify(jsonObj));
 		
 		let score = 100/answerArrayLen;
-		let TotalScore = score*correctAnswer;
+		let TotalScore = Math.round((score*correctAnswer)*100)/100;
 		var ScoreObject = new Object;
 		ScoreObject.Table = jsonObj;
 		ScoreObject.TotalScore = TotalScore;
@@ -375,6 +373,7 @@ function SetJsonArrayNewData(ScoreObject) {
 }
 
 function GetJsonArray() {
+	$('#ScoreDataSelect').children('option').remove();
 	ScoreJsonArray = new Array("", "", "", "", "", "", "", "", "", "");
 	for (let keyIndex=0;keyIndex<DataKey.length;keyIndex++) {
 		let rawData = ustLocalStorageGetItem(DataKey[keyIndex]);
@@ -389,9 +388,34 @@ function GetJsonArray() {
 			console.log("GenJsonArray() Data Null!!");
 		}
 	}
+	
+	ScoreJsonDisplayResArray = ScoreJsonArray.sort(function(a, b) { 
+		if (a.UpDateTime === b.UpDateTime) { 
+			return -1; 
+		} 
+
+		if (a.UpDateTime > b.UpDateTime) { 
+			return -1; 
+		} 
+
+		if (a.UpDateTime < b.UpDateTime) { 
+			return 1; 
+		}
+		return 0; 
+	});
+	
+		
+	for (let selectAddIndex in ScoreJsonDisplayResArray) {
+		var itemDate = new Date(ScoreJsonDisplayResArray[selectAddIndex].UpDateTime+(8 * 3600 * 1000)).toISOString().slice(0, -5);
+		$("#ScoreDataSelect").append('<option value="'+selectAddIndex+'">'+itemDate+'</option>');
+	}
+	//console.log(ScoreJsonDisplayResArray);
 }
 
 function ResetStorage() {
+	ScoreJsonArray = new Array("", "", "", "", "", "", "", "", "", "");
+	ScoreJsonDisplayResArray = new Array();
+	$('#ScoreDataSelect').children('option').remove();
 	for (let keyIndex=0;keyIndex<DataKey.length;keyIndex++) {
 		ustLocalStorageRemoveItem(DataKey[keyIndex]);
 	}

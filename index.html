@@ -4,12 +4,15 @@
 <script type="text/javascript" src="./jquery/jquery-3.5.1.js"></script>
 <link rel="stylesheet" type="text/css" href="./res/main.css">
 <meta charset="utf-8" />
-<title>ABC</title>
+<title>WEB ABC01</title>
 </head>
 <body>
 
 <div id="dmsg" >
 <button class="buttonExitMsgDisplay" type="button" onclick="ExitMsgDisplay()" >退出</button>
+<select id="ScoreDataSelect">
+  <option value ="1">0</option>
+</select>
 <button class="buttonResetMsg" type="button" onclick="ResetStorage()" >清除紀錄</button>
 <p id="TotalScore"></p>
 <table class="table table-bordered">
@@ -19,6 +22,7 @@
 		<th class="tableTh" id="table_Auestion">問題</th>
 		<th class="tableTh" id="table_Ans">答案</th>
 		<th class="tableTh" id="table_C">答對</th>
+		<th class="tableTh" id="table_ISOTime">作答時間</th>
 		</tr>
 	</thead>
 	<tbody class="table table-bordered" id= "tbody_makeEditable">

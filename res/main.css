@@ -88,10 +88,18 @@ table {
 }
 
 #TotalScore {
-	width: 30vw;
+	width: 20vw;
     position: absolute;
     top: 3vh;
     left: 30vw;
+    font-size: xx-large;
+}
+
+#ScoreDataSelect {
+	width: 18vw;
+    position: absolute;
+    top: 3vh;
+    left: 55vw;
     font-size: xx-large;
 }
 
@@ -101,6 +109,11 @@ table {
     top: 5vh;
     left: 5vw;
     font-size: x-large;
+}
+
+.tdval {
+	width: 20vw;
+	text-align: center;
 }
 
 .buttonExitMsgDisplay {
