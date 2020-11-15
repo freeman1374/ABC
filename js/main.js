@@ -30,10 +30,9 @@ $(function(){
 	FastScreen();
 	GetJsonArray();
 	resetQ();
-	$("#ScoreDataSelect").change(function(){
-	//$("#ScoreDataSelect").on('selectmenuchange',function (){
-		showMsgDisplay(null);
-	});
+	//$("#ScoreDataSelect").change(function(){
+	//	showMsgDisplay(null);
+	//});
 });
 
 function ButtonOnClick(input) {
@@ -138,20 +137,22 @@ function ButtonOnClick(input) {
 		break;
 		case '+':
 		case '-':
-			if (0==setupType.length) {
-				setupType = input;
-				MaxSetupLen = 4;
-				ShowSetupInfo();
-			}
+			setupType = input;
+			MaxSetupLen = 4;
+			setupLen1 = 0;
+			setupLen2 = 0;
+			questionArray.pop();
+			ShowSetupInfo();
 			console.log("ButtonOnClick() "+input);
 		break;
 		case '×':
 		case '÷':
-			if (0==setupType.length) {
-				setupType = input;
-				MaxSetupLen = 2;
-				ShowSetupInfo();				
-			}
+			setupType = input;
+			MaxSetupLen = 2;
+			setupLen1 = 0;
+			setupLen2 = 0;
+			questionArray.pop();
+			ShowSetupInfo();
 			console.log("ButtonOnClick() "+input);
 		break;
 		default:
@@ -419,6 +420,7 @@ function GetJsonArray() {
 			var itemDate = new Date(ScoreJsonDisplayResArray[selectAddIndex].UpDateTime+(8 * 3600 * 1000)).toISOString().slice(0, -5);
 			$("#ScoreDataSelect").append('<option value="'+selectAddIndex+'">'+itemDate+'</option>');
 		}
+		$("#ScoreDataSelect").val('0');
 	}
 	//console.log(ScoreJsonDisplayResArray);
 }
