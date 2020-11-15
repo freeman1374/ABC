@@ -87,7 +87,7 @@ function ShowSetupInfo() {
 		showText += " 第二位數:"+setupLen2;
 		width = calcTextW(SwordWp, showText);
 		clearFastScreen();
-		$('#Exit').html('完成');
+		$('#Exit').html('檢視成績');
 	}
 	
 	if (0!=showText.length)
@@ -162,18 +162,22 @@ function drawQuestionArea() {
 				textColor = "#de2f2f";
 		}
 		if (drawWp500<ansLen) ansLen = drawWp500;
+		
 		let Q_TextH = Q_TextH_L5;
+		let Q_TextW = nowQ_TextW-ansLen;
+		
 		if (0==inputValIndex) {
 			Q_TextH = Q_TextH_L3;
 		} else if (1==inputValIndex) {
+			if ('×'==setupType ) Q_TextW = nowQ_TextW-ansLen-LwordWp;//Auto Shift 1 Word
 			Q_TextH = Q_TextH_L4;
 		} else if (2==inputValIndex) {
 			Q_TextH = Q_TextH_L5;
 		}
 		if (inputValCurrentIndex==inputValIndex) {
-			drawTextInStroke(inputVal[inputValIndex], textColor, 'Arial', nowQ_TextW-ansLen, Q_TextH, ansLen, LwordHp);
+			drawTextInStroke(inputVal[inputValIndex], textColor, 'Arial', Q_TextW, Q_TextH, ansLen, LwordHp);
 		} else {
-			drawTextInBox(inputVal[inputValIndex], textColor, 'Arial', nowQ_TextW-ansLen, Q_TextH, ansLen, LwordHp);
+			drawTextInBox(inputVal[inputValIndex], textColor, 'Arial', Q_TextW, Q_TextH, ansLen, LwordHp);
 		}
 		
 	}

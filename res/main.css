@@ -90,9 +90,9 @@ table {
 #TotalScore {
 	width: 90vw;
     position: absolute;
-    /* top: 50%; */
-    left: 5vw;
-    font-size: x-large;
+    top: 3vh;
+    left: 30vw;
+    font-size: xx-large;
 }
 
 .table-bordered {
@@ -104,13 +104,12 @@ table {
 }
 
 .buttonExitMsgDisplay {
-	position: absolute;
-    /* top: 5vh; */
+	position: relative;
+    top: 2vh;
     left: 5vw;
     width: 21vw;
     height: 4vh;
     font-size: xx-large;
-    bottom: 10vh;
 }
 
 .EnterKey {

@@ -96,7 +96,8 @@ function ButtonOnClick(input) {
 		
 		case 'Exit':
 			if (0<answerArray.length) {
-				if (confirm("確定結算?")) {
+				CheckAns();
+				if (confirm("現在就檢視成績?")) {
 					GenJsonTable(true);
 					//resetQ();
 					console.log("ButtonOnClick() Exit");
@@ -117,7 +118,8 @@ function ButtonOnClick(input) {
 		break;
 		
 		case 'Esc':
-			if (confirm("確定離開")) {
+			CheckAns();
+			if (confirm("確定返回主畫面?")) {
 				if (0<answerArray.length)
 					GenJsonTable(false);
 				
@@ -244,6 +246,9 @@ function CheckAns() {
 				break;
 			}
 		}
+		
+		if (0==inputAns)
+			return;
 		
 		console.log("Question ("+index+ ") : "+v1+type+v2 +"="+ inputAns + "index inputValIndex :"+ inputValIndex);
 		
