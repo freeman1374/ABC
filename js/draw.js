@@ -52,6 +52,7 @@ function FastScreen() {
 	let showText = "輸入 + - × ÷ 選擇題目";
 	drawTextInBox(showText, "#204000", 'Arial',  drawWp*(1000/2)-(calcTextW(LwordWp, showText)/2), drawHp*(1000/2)-LwordHp/2, calcTextW(LwordWp, showText), LwordHp);
 	ctx.strokeRect(drawWp*2, drawHp*2, drawWp*(998), drawHp*(998));
+	$('#Exit').html('上次紀錄');
 }
 
 function ShowSetupInfo() {
@@ -88,6 +89,7 @@ function ShowSetupInfo() {
 		showText += " 第二位數:"+setupLen2;
 		width = calcTextW(SwordWp, showText);
 		clearFastScreen();
+		$('#Exit').html('完成');
 	}
 	
 	if (0!=showText.length)
@@ -209,3 +211,16 @@ function showMsgDisplay(data) {
 	$('#dmsg').show();
 	
 }
+
+function ExitMsgDisplay() {
+	$('#dmsg').hide();
+}
+
+function setNoteKeyHiLight(HiLight) {
+	if (HiLight) {
+		document.getElementById('buttonNote').style.color = 'red';
+	} else {
+		document.getElementById('buttonNote').style.color = '#000000';
+	}
+}
+

@@ -43,7 +43,7 @@ let DataKey= "ABC_Data"
 }
  */
 $(function(){
-	$('#dmsg').hide();
+	ExitMsgDisplay();
 	initctx();
 	FastScreen();
 	resetQ();	
@@ -67,7 +67,6 @@ function ButtonOnClick(input) {
 				setupLen2 = input;
 				console.log("ButtonOnClick() setupLen2 = "+setupLen2);
 				ShowSetupInfo();
-				$('#Exit').html('完成');
 				AskQuestion();
 				break;
 			}
@@ -104,13 +103,13 @@ function ButtonOnClick(input) {
 			if (""!=inputVal || ""!=noteInputVal) {
 				if (note) {
 					note = false;
-					document.getElementById('buttonNote').style.color = '#000000';
+					setNoteKeyHiLight(note);
 				} else {
 					if (""==noteInputVal) {
 						noteInputVal = inputVal;
 					}
 					note = true;
-					document.getElementById('buttonNote').style.color = 'red';
+					setNoteKeyHiLight(note);
 				}
 				drawQ();
 				console.log("ButtonOnClick() note = "+note);
@@ -204,14 +203,21 @@ function getRandom(min,max){
 };
 
 function resetQ() {
-	$('#Exit').html('上次紀錄');
 	//clearInterval(runTimer);
+	//runTimer = setInterval(setFunc, 1000);
+	
+	inputVal = "";
+	noteInputVal = "";
+
 	setupType = "";
 	setupLen1 = 0;
 	setupLen2 = 0;
+
 	questionArray = new Array();
 	answerArray = new Array();
-	//runTimer = setInterval(setFunc, 1000);
+	note = false;
+	
+	setNoteKeyHiLight(note);
 }
 
 function AskQuestion() {
