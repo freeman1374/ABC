@@ -25,10 +25,8 @@ function calcTextW(wordW, string) {
 	let stringLength;
 	if (isNaN(string.length)) {
 		stringLength = string.toString().length;
-		//console.log("1 stringLength : "+stringLength);
 	} else {
 		stringLength = string.length;
-		//console.log("2 stringLength : "+stringLength);
 	}
 	
 	textWtmp = textW*stringLength;
@@ -71,7 +69,7 @@ function ShowSetupInfo() {
 	let width = calcTextW(SwordWp, showText);
 	if (setupLen1 == 0) {
 		clearFastScreen();
-		showTextC = "輸入第一位數1~4";
+		showTextC = "輸入第一位數1~"+MaxSetupLen.toString();
 		drawTextInBox(showTextC, "#204000", 'Arial',  drawWp*(1000/2)-(calcTextW(LwordWp, showTextC)/2), drawHp*(1000/2)-LwordHp/2, calcTextW(LwordWp, showTextC), LwordHp);
 	}
 	
@@ -101,7 +99,7 @@ function clearFastScreen() {
 	ctx.clearRect(drawWp*4, drawHp*4, drawWp*(994), drawHp*(994));
 }
 
-function drawQ() {
+function drawQuestionArea() {
 	ctx.clearRect(drawWp*4, drawHp*SwordHp+20, drawWp*(994), drawHp*(980-SwordHp));
 	let qIndex = -1;
 	let aIndex = -1;
@@ -116,11 +114,13 @@ function drawQ() {
 	
 	let Q_TextH_L1 = drawHp*170;
 	let Q_TextH_L2 = drawHp*354;
-	let Q_TextH_L3 = drawHp*574;
+	let Q_TextH_L3 = drawHp*570;
+	let Q_TextH_L4 = drawHp*700;
+	let Q_TextH_L5 = drawHp*826;
 	
 	let baselineW = drawWp*406;
 	let baselineH = drawHp*6;
-	
+	  
 	let nowSymbolW = drawWp*46;
 	let preSymbolW = drawWp*586;
 	let symbolH = drawHp*435;
@@ -151,14 +151,31 @@ function drawQ() {
 	drawTextInBox(questionArray[qIndex][2], "#00A0CF", 'Arial', nowSymbolW, symbolH, LwordWp, LwordHp);
 	drawTextInBox(questionArray[qIndex][0], "#000", 'Arial', nowQ_TextW-calcTextW(LwordWp, questionArray[qIndex][0]), Q_TextH_L1, calcTextW(LwordWp, questionArray[qIndex][0]), LwordHp);
 	drawTextInBox(questionArray[qIndex][1], "#000", 'Arial', nowQ_TextW-calcTextW(LwordWp, questionArray[qIndex][1]), Q_TextH_L2, calcTextW(LwordWp, questionArray[qIndex][1]), LwordHp);
-	if (note) {
-		ansLen = calcTextW(LwordWp, noteInputVal)
+	for (let inputValIndex=0;inputValIndex<inputVal.length;inputValIndex++) {
+		let textColor =  "#0A40CF";
+		ansLen = calcTextW(LwordWp, inputVal[inputValIndex])
+		if (inputValIndex+1<inputVal.length) {
+			if(0 == inputVal[inputValIndex+1].length)
+				textColor = "#de2f2f";
+		} else if (2==inputValCurrentIndex) {
+			if(0 != inputVal[inputValCurrentIndex].length)
+				textColor = "#de2f2f";
+		}
 		if (drawWp500<ansLen) ansLen = drawWp500;
-		drawTextInBox(noteInputVal, "#0A40CF", 'Arial', nowQ_TextW-ansLen, Q_TextH_L3, ansLen, LwordHp);
-	} else {
-		ansLen = calcTextW(LwordWp, inputVal)
-		if (drawWp500<ansLen) ansLen = drawWp500;
-		drawTextInBox(inputVal, "#000", 'Arial', nowQ_TextW-ansLen, Q_TextH_L3, ansLen, LwordHp);
+		let Q_TextH = Q_TextH_L5;
+		if (0==inputValIndex) {
+			Q_TextH = Q_TextH_L3;
+		} else if (1==inputValIndex) {
+			Q_TextH = Q_TextH_L4;
+		} else if (2==inputValIndex) {
+			Q_TextH = Q_TextH_L5;
+		}
+		if (inputValCurrentIndex==inputValIndex) {
+			drawTextInStroke(inputVal[inputValIndex], textColor, 'Arial', nowQ_TextW-ansLen, Q_TextH, ansLen, LwordHp);
+		} else {
+			drawTextInBox(inputVal[inputValIndex], textColor, 'Arial', nowQ_TextW-ansLen, Q_TextH, ansLen, LwordHp);
+		}
+		
 	}
 }
 
@@ -174,7 +191,25 @@ function drawTextInBox(txt, fillStyle, font, x, y, w, h, angle) {
 	ctx.save();
 	ctx.translate(x+w/2, y);
 	ctx.rotate(angle);
-	//ctx.strokeRect(-w/2, 0, w, h);//框線
+	ctx.scale(w / txtWidth, h / fontHeight);
+	ctx.translate(hMargin, 0)
+	ctx.fillText(txt, -txtWidth/2, 0);
+	ctx.restore();
+}
+
+function drawTextInStroke(txt, fillStyle, font, x, y, w, h, angle) {
+	angle = angle || 0;
+	var fontHeight = 20;
+	var hMargin = 4;
+	ctx.font = fontHeight + 'px ' + font;
+	ctx.textAlign = 'left';
+	ctx.textBaseline = 'top';
+	ctx.fillStyle = fillStyle;
+	var txtWidth = ctx.measureText(txt).width + 2 * hMargin;
+	ctx.save();
+	ctx.translate(x+w/2, y);
+	ctx.rotate(angle);
+	ctx.strokeRect(-w/2, 0, w, h);//框線
 	ctx.scale(w / txtWidth, h / fontHeight);
 	ctx.translate(hMargin, 0)
 	ctx.fillText(txt, -txtWidth/2, 0);

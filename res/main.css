@@ -112,3 +112,8 @@ table {
     font-size: xx-large;
     bottom: 10vh;
 }
+
+.EnterKey {
+	background: #6dd0ff;
+    border: 10px solid #6dd0ff;
+}

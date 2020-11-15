@@ -1,47 +1,25 @@
-var inputVal = "";
-var noteInputVal = "";
+//var inputVal = "";
+//var noteInputVal = "";
+
+let inputValCurrentIndex = 0;
+let inputValIndexCycleIndex = 0;
+var inputVal = new Array("", "", "");
+let inputValIndexCycle = [0, 1, 2, 1];
 
 var setupType = "";
 var setupLen1 = 0;
 var setupLen2 = 0;
+var MaxSetupLen = 4;
 
 /* var runTimer;
 var screenTimer; */
 
 var questionArray = new Array();
 var answerArray = new Array();
-let note = false;
+
 let lockKey = false;
 let DataKey= "ABC_Data"
 
-/* function setFunc() {
-//	var d = new Date();
-//	console.log(d.toLocaleTimeString());
-	
-	if (0==setupType.length) {
-		switch (setupType) {
-			case '+':
-			case '-':
-			case '×':
-			case '÷':
-			console.log("ButtonOnClick() "+setupType);
-			break;
-			default:
-			break;
-		}
-		console.log("請選擇功能");
-	} else if (0==setupLen1) {
-		console.log("請輸入長度1");
-	} else if (0==setupLen2) {
-		console.log("請輸入長度2");
-	} else if (0!=setupLen2) {
-		console.log("輸入長度2");
-		clearInterval(runTimer);
-		runTimer = null;
-		//AskQuestion();
-	}
-}
- */
 $(function(){
 	ExitMsgDisplay();
 	initctx();
@@ -58,7 +36,7 @@ function ButtonOnClick(input) {
 		case 2:
 		case 3:
 		case 4:
-			if (0==setupLen1 && 0!=setupType.length) {
+			if (0==setupLen1 && 0!=setupType.length && input<=MaxSetupLen ) {
 				setupLen1 = input;
 				console.log("ButtonOnClick() setupLen1 = "+setupLen1);
 				ShowSetupInfo();
@@ -77,43 +55,43 @@ function ButtonOnClick(input) {
 		case 8:
 		case 9:
 		case '.':
-		if (true==note && 0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>noteInputVal.length) {
-			noteInputVal = noteInputVal+input;
-			console.log("ButtonOnClick() noteInputVal = "+noteInputVal);
-			drawQ();
-		} else if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>inputVal.length) {
-			inputVal = inputVal+input;
-			console.log("ButtonOnClick() inputVal = "+inputVal);
-			drawQ();
+		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>inputVal.length) {
+			//inputVal.push();
+			inputVal[inputValCurrentIndex] = input+inputVal[inputValCurrentIndex];
+			
+			console.log("ButtonOnClick() inputVal = "+inputVal[inputValCurrentIndex]);
+			drawQuestionArea();
 		}
 		break;
 		case 'AC':
 			if (""!=inputVal) {
-				inputVal = "";
-				drawQ();
+				inputValIndexCycleIndex = 0;
+				inputValCurrentIndex = 0;
+				inputVal = new Array("", "", "");
+				drawQuestionArea();
 				console.log("ButtonOnClick() clear inputVal");
-			} else if (""!=noteInputVal) {
-				noteInputVal = "";
-				drawQ();
-				console.log("ButtonOnClick() clear noteInputVal");
+			}
+		break;
+		
+		case 'Backspace':
+			if (""!=inputVal) {
+				//console.log("ButtonOnClick() 1 inputVal[inputValCurrentIndex] : "+inputVal[inputValCurrentIndex]);
+				//inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(0, inputVal[inputValCurrentIndex].length-1);
+				inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(1, inputVal[inputValCurrentIndex].length);
+				drawQuestionArea();
+				//console.log("ButtonOnClick() 2 inputVal[inputValCurrentIndex] : "+inputVal[inputValCurrentIndex]);
 			}
 		break;
 		
 		case 'Note':
-			if (""!=inputVal || ""!=noteInputVal) {
-				if (note) {
-					note = false;
-					setNoteKeyHiLight(note);
-				} else {
-					if (""==noteInputVal) {
-						noteInputVal = inputVal;
-					}
-					note = true;
-					setNoteKeyHiLight(note);
-				}
-				drawQ();
-				console.log("ButtonOnClick() note = "+note);
+			if (inputValIndexCycleIndex>=inputValIndexCycle.length-1) {
+				inputValIndexCycleIndex=0;
+			} else {
+				inputValIndexCycleIndex++;
 			}
+			inputValCurrentIndex = inputValIndexCycle[inputValIndexCycleIndex];
+			drawQuestionArea();
+			console.log("ButtonOnClick() note inputValCurrentIndex = "+inputValCurrentIndex);
 		break;
 		
 		case 'Exit':
@@ -132,7 +110,9 @@ function ButtonOnClick(input) {
 					} catch(e) {
 						alert(e); // error in the above string (in this case, yes)!
 					}
-				}	
+				} else {
+					alert("沒有紀錄");
+				}
 			}
 		break;
 		
@@ -149,46 +129,23 @@ function ButtonOnClick(input) {
 			}
 		break;
 		case 'Enter':
-			let index = questionArray.length;
-			let ret = false;
-			if (0!=index && setupLen1 != 0 && setupLen2 != 0 && inputVal!="" && true!=note) {
-				let v1 = questionArray[index-1][0];
-				let v2 = questionArray[index-1][1];
-				
-				console.log("Question ("+index+ ") : "+v1+setupType+v2 +"="+ inputVal);
-				
-				if ('+'==setupType) {
-					if ((v1+v2)==inputVal)
-						ret = true;
-				} else if ('-'==setupType) {
-					if ((v1-v2)==inputVal)
-						ret = true;
-				} else if ('×'==setupType) {
-					if ((v1*v2)==inputVal)
-						ret = true;
-				} else if ('÷'==setupType) {
-					if ((v1/v2)==inputVal)
-						ret = true;					
-				}
-				answerArray.push([inputVal, ret]);
-				if (ret) {
-					console.log("ButtonOnClick() correct answer");
-				} else {
-					console.log("ButtonOnClick() wrong answer");
-				}
-				noteInputVal = inputVal = "";
-				AskQuestion();
-			} else {
-				console.log("ButtonOnClick() Enter");
-			}
+			CheckAns();
 		break;
 		case '+':
 		case '-':
+			if (0==setupType.length) {
+				setupType = input;
+				MaxSetupLen = 4;
+				ShowSetupInfo();
+			}
+			console.log("ButtonOnClick() "+input);
+		break;
 		case '×':
 		case '÷':
 			if (0==setupType.length) {
 				setupType = input;
-				ShowSetupInfo();
+				MaxSetupLen = 2;
+				ShowSetupInfo();				
 			}
 			console.log("ButtonOnClick() "+input);
 		break;
@@ -206,18 +163,18 @@ function resetQ() {
 	//clearInterval(runTimer);
 	//runTimer = setInterval(setFunc, 1000);
 	
-	inputVal = "";
-	noteInputVal = "";
-
+	inputValIndexCycleIndex = 0;
+	inputValCurrentIndex = 0;
+	inputVal = new Array("", "", "");
+	
 	setupType = "";
 	setupLen1 = 0;
 	setupLen2 = 0;
 
 	questionArray = new Array();
 	answerArray = new Array();
-	note = false;
 	
-	setNoteKeyHiLight(note);
+	setNoteKeyHiLight(false);
 }
 
 function AskQuestion() {
@@ -248,16 +205,20 @@ function AskQuestion() {
 	}
 		
 	if ('-'==setupType) {
-		val_1 = getRandom(min1, max1);
-		val_2 = getRandom(min2, max2);
-		if (val_2 > val_1) {
-			[val_1, val_2] = [val_2, val_1];
-		}
-	} else if ('÷'==setupType) {
 		do {
 			val_1 = getRandom(min1, max1);
 			val_2 = getRandom(min2, max2);
-		} while((val_1!=val_2)&&((val_1%val_2)!=0));
+			if (val_2 > val_1) {
+				[val_1, val_2] = [val_2, val_1];
+			}
+		} while((val_1-val_2)<=0);
+	} else if ('÷'==setupType) {
+		//do {
+			//val_1 = getRandom(min1, max1);
+			//val_2 = getRandom(min2, max2);
+		//} while((val_1!=val_2)&&((val_1%val_2)!=0));
+		val_1 = getRandom(min1, max1);
+		val_2 = getRandom(min2, max2);
 	} else {
 		val_1 = getRandom(min1, max1);
 		val_2 = getRandom(min2, max2);
@@ -265,10 +226,56 @@ function AskQuestion() {
 	
 	console.log('Question '+val_1+setupType+val_2+" ?");
 	questionArray.push([val_1, val_2, setupType]);
-	noteInputVal = "";
-	drawQ();
+	drawQuestionArea();
 }
 
+function CheckAns() {
+	let index = questionArray.length;
+	let ret = false;
+	if (0!=index && setupLen1 != 0 && setupLen2 != 0 && 0<inputVal.length ) {
+		let v1 = questionArray[index-1][0];
+		let v2 = questionArray[index-1][1];
+		let type = questionArray[index-1][2];
+		let inputAns = 0;
+		let inputValIndex;
+		for (inputValIndex=inputVal.length-1;inputValIndex>=0;inputValIndex--) {
+			if(0<=inputVal[inputValIndex] && ""!=inputVal[inputValIndex]) {
+				inputAns = inputVal[inputValIndex];
+				break;
+			}
+		}
+		
+		console.log("Question ("+index+ ") : "+v1+type+v2 +"="+ inputAns + "index inputValIndex :"+ inputValIndex);
+		
+		if ('+'==type) {
+			if ((v1+v2)==inputAns)
+				ret = true;
+		} else if ('-'==type) {
+			if ((v1-v2)==inputAns)
+				ret = true;
+		} else if ('×'==type) {
+			if ((v1*v2)==inputAns)
+				ret = true;
+		} else if ('÷'==type) {
+			console.log("Ans : "+ Math.round((v1/v2)*100)/100);
+			if ((Math.round((v1/v2)*100)/100)==inputAns) {
+				ret = true;
+			}
+		}
+		answerArray.push([inputAns, ret]);
+		if (ret) {
+			console.log("ButtonOnClick() correct answer");
+		} else {
+			console.log("ButtonOnClick() wrong answer");
+		}
+		inputValIndexCycleIndex = 0;
+		inputValCurrentIndex = 0;
+		inputVal = new Array("", "", "");
+		AskQuestion();
+	}
+	return ret;
+}
+			
 function GenJsonTable(showUITable) {
 	let questionArrayLen = questionArray.length;
 	let answerArrayLen = answerArray.length;
