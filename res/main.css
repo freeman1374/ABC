@@ -5,8 +5,8 @@
 
 canvas{
 	display: block;
-	width: 100vw;
-	height: 70vh;
+	width: 99vw;
+	height: 55vh;
 }
 
 div.float {
@@ -55,6 +55,59 @@ table {
     position: relative;
     border-radius: 4px;
     -webkit-touch-action: manipulation;
+}
+
+.topbutton {
+	height: 9.3vh;
+    cursor: pointer;
+    text-align: center;
+    /* line-height: 29px; */
+    margin: 4px;
+    position: relative;
+    background: #dadce0;
+    color: #202124;
+    border: 10px solid #dadce0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    /* font-size: xxx-large;*/
+}
+
+.topbuttonDiv {
+	outline: none;
+    background: #dadce0;
+    color: #202124;
+    border: 4px solid #dadce0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    line-height: 7.3vh;
+    height: 8vh;
+    font-size: xxx-large;
+}
+
+.topbuttonText {
+	height: 9.3vh;
+    cursor: pointer;
+    text-align: center;
+    /* line-height: 29px; */
+    margin: 4px;
+    position: relative;
+    background: #dadce0;
+    color: #202124;
+    border: 10px solid #dadce0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: xx-large;
+}
+
+.topbuttonDivText {
+	outline: none;
+    background: #dadce0;
+    color: #202124;
+    border: 4px solid #dadce0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    height: 8vh;
+    line-height: 3vh;
 }
 
 .A2W7l {

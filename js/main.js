@@ -63,7 +63,7 @@ function ButtonOnClick(input) {
 		case 8:
 		case 9:
 		case '.':
-		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>inputVal.length) {
+		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>inputVal[inputValCurrentIndex].length) {
 			//inputVal.push();
 			inputVal[inputValCurrentIndex] = input+inputVal[inputValCurrentIndex];
 			
@@ -72,7 +72,7 @@ function ButtonOnClick(input) {
 		}
 		break;
 		case 'AC':
-			if (""!=inputVal) {
+			if (""!=setupType && 0!=setupLen1 && 0!=setupLen2) {
 				inputValIndexCycleIndex = 0;
 				inputValCurrentIndex = 0;
 				inputVal = new Array("", "", "");
@@ -82,7 +82,7 @@ function ButtonOnClick(input) {
 		break;
 		
 		case 'Backspace':
-			if (""!=inputVal) {
+			if (""!=setupType && 0!=setupLen1 && 0!=setupLen2) {
 				//console.log("ButtonOnClick() 1 inputVal[inputValCurrentIndex] : "+inputVal[inputValCurrentIndex]);
 				//inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(0, inputVal[inputValCurrentIndex].length-1);
 				inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(1, inputVal[inputValCurrentIndex].length);
@@ -92,14 +92,16 @@ function ButtonOnClick(input) {
 		break;
 		
 		case 'Note':
-			if (inputValIndexCycleIndex>=inputValIndexCycle.length-1) {
-				inputValIndexCycleIndex=0;
-			} else {
-				inputValIndexCycleIndex++;
+			if (""!=setupType && 0!=setupLen1 && 0!=setupLen2) {
+				if (inputValIndexCycleIndex>=inputValIndexCycle.length-1) {
+					inputValIndexCycleIndex=0;
+				} else {
+					inputValIndexCycleIndex++;
+				}
+				inputValCurrentIndex = inputValIndexCycle[inputValIndexCycleIndex];
+				drawQuestionArea();
+				console.log("ButtonOnClick() note inputValCurrentIndex = "+inputValCurrentIndex);
 			}
-			inputValCurrentIndex = inputValIndexCycle[inputValIndexCycleIndex];
-			drawQuestionArea();
-			console.log("ButtonOnClick() note inputValCurrentIndex = "+inputValCurrentIndex);
 		break;
 		
 		case 'Exit':
@@ -121,7 +123,7 @@ function ButtonOnClick(input) {
 		
 		case 'Esc':
 			CheckAns();
-			if (confirm("確定返回主畫面?")) {
+			if (confirm("確定重新開始?")) {
 				if (0<answerArray.length)
 					GenJsonTable(false);
 				
