@@ -18,12 +18,16 @@ var questionArray = new Array();
 var answerArray = new Array();
 
 let lockKey = false;
-let DataKey= "ABC_Data"
+let DataKey = new Array("ABC_Data1", "ABC_Data2", "ABC_Data3", "ABC_Data4", "ABC_Data5", 
+						"ABC_Data6", "ABC_Data7", "ABC_Data8", "ABC_Data9", "ABC_Data10");
+
+let ScoreJsonArray;
 
 $(function(){
 	ExitMsgDisplay();
 	initctx();
 	FastScreen();
+	GetJsonArray();
 	resetQ();	
 });
 
@@ -103,7 +107,7 @@ function ButtonOnClick(input) {
 					console.log("ButtonOnClick() Exit");
 				}
 			} else {
-				let rawData = ustLocalStorageGetItem(DataKey);
+				/* let rawData = ustLocalStorageGetItem(DataKey);
 				if(rawData) {
 					try {
 						let jsonString = JSON.parse(rawData);
@@ -113,7 +117,7 @@ function ButtonOnClick(input) {
 					}
 				} else {
 					alert("沒有紀錄");
-				}
+				} */
 			}
 		break;
 		
@@ -267,7 +271,10 @@ function CheckAns() {
 				ret = true;
 			}
 		}
-		answerArray.push([inputAns, ret]);
+		
+		var now = new Date();
+		answerArray.push([inputAns, ret, now.toUTCString()]);
+		
 		if (ret) {
 			console.log("ButtonOnClick() correct answer");
 		} else {
@@ -292,6 +299,7 @@ function GenJsonTable(showUITable) {
 			obj.Question = questionArray[index][0] + questionArray[index][2] + questionArray[index][1];
 			obj.Answer = answerArray[index][0];
 			obj.CorrectAnswer = answerArray[index][1];
+			obj.AnswerDate = answerArray[index][2];
 			if (true==answerArray[index][1]) {
 				correctAnswer++;
 			}
@@ -304,14 +312,88 @@ function GenJsonTable(showUITable) {
 		var ScoreObject = new Object;
 		ScoreObject.Table = jsonObj;
 		ScoreObject.TotalScore = TotalScore;
-		let jsonBuf = JSON.stringify(ScoreObject)
-		//console.log(jsonBuf);
+		var seconds = Date.now();
+		ScoreObject.UpDateTime = seconds;
+		
 		if (showUITable)
 			showMsgDisplay(ScoreObject);
 		
-		ustLocalStorageSetItem(DataKey, jsonBuf)
+		//let jsonBuf = JSON.stringify(ScoreObject)
+		//console.log(jsonBuf);
+		//ustLocalStorageSetItem(DataKey, jsonBuf);
+		
+		SetJsonArrayNewData(ScoreObject);
 	} else {
 		console.log("Data Error!!");
+	}
+}
+
+
+function SetJsonArrayNewData(ScoreObject) {
+	//ustLocalStorageSetItem(DataKey, jsonBuf) DataKey[keyIndex]
+	let dateArray = new Array();
+	let toSave = false;
+	let SaveKey;
+	for (let jsIndex=0;jsIndex<ScoreJsonArray.length;jsIndex++) {
+		if (ScoreJsonArray[jsIndex]!="") {
+			dateArray.push(ScoreJsonArray[jsIndex].UpDateTime);
+		} else if (ScoreJsonArray[jsIndex]=="") {
+			toSave = true;
+			SaveKey = DataKey[jsIndex];
+			break;
+		}
+	}
+	
+	if (false==toSave) {
+		let minDate = Math.min( ...dateArray);
+		//console.log("minDate :"+ minDate);
+		for (let dateIndex=0;dateIndex<dateArray.length;dateIndex++) {
+			if (dateArray[dateIndex] == minDate) {
+				//console.log("minDate :"+ minDate+ " dateIndex :"+dateIndex);
+				break;
+			}
+		}
+		for (let jsIndex=0;jsIndex<ScoreJsonArray.length;jsIndex++) {
+			if (ScoreJsonArray[jsIndex]!="") {
+				if (ScoreJsonArray[jsIndex].UpDateTime == minDate){
+					SaveKey = ScoreJsonArray[jsIndex].SaveKey;
+					//console.log("1 jsIndex :" + jsIndex);
+					break;
+				}
+				//else {
+					//console.log("2 jsIndex :" + jsIndex);
+				//}
+			}
+		}
+	}
+	
+	ScoreObject.SaveKey = SaveKey;
+	let jsonBuf = JSON.stringify(ScoreObject)
+	console.log(jsonBuf);
+	ustLocalStorageSetItem(SaveKey, jsonBuf);
+	GetJsonArray();
+}
+
+function GetJsonArray() {
+	ScoreJsonArray = new Array("", "", "", "", "", "", "", "", "", "");
+	for (let keyIndex=0;keyIndex<DataKey.length;keyIndex++) {
+		let rawData = ustLocalStorageGetItem(DataKey[keyIndex]);
+		if(rawData) {
+			try {
+				let jsonString = JSON.parse(rawData);
+				ScoreJsonArray[keyIndex] = jsonString;
+			} catch(e) {
+				console.log("GenJsonArray() Data Error!!");
+			}
+		} else {
+			console.log("GenJsonArray() Data Null!!");
+		}
+	}
+}
+
+function ResetStorage() {
+	for (let keyIndex=0;keyIndex<DataKey.length;keyIndex++) {
+		ustLocalStorageRemoveItem(DataKey[keyIndex]);
 	}
 }
 

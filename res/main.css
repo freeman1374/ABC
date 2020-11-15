@@ -88,7 +88,7 @@ table {
 }
 
 #TotalScore {
-	width: 90vw;
+	width: 30vw;
     position: absolute;
     top: 3vh;
     left: 30vw;
@@ -107,6 +107,15 @@ table {
 	position: relative;
     top: 2vh;
     left: 5vw;
+    width: 21vw;
+    height: 4vh;
+    font-size: xx-large;
+}
+
+.buttonResetMsg {
+	position: relative;
+    top: 2vh;
+    left: 53vw;
     width: 21vw;
     height: 4vh;
     font-size: xx-large;
