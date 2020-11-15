@@ -104,6 +104,7 @@ function ButtonOnClick(input) {
 		
 		case 'Exit':
 			if (0<answerArray.length) {
+				CheckAns();
 				if (confirm("現在就檢視成績?")) {
 					GenJsonTable(true);
 					//resetQ();
@@ -340,6 +341,12 @@ function SetJsonArrayNewData(ScoreObject) {
 			SaveKey = DataKey[jsIndex];
 			break;
 		}
+	}
+	
+	
+	if (ScoreJsonDisplayResArray[0].Table[Object.keys(ScoreJsonDisplayResArray[0].Table).length-1].AnswerDate == ScoreObject.Table[Object.keys(ScoreObject.Table).length-1].AnswerDate) {
+		console.log("SetJsonArrayNewData Exit.");
+		return;
 	}
 	
 	if (false==toSave) {
