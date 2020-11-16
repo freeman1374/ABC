@@ -62,7 +62,7 @@ function ButtonOnClick(input) {
 		case 9:
 		case '.':
 		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && maxInputLen>inputVal[inputValCurrentIndex].length) {
-			if ('÷'==setupType) {
+			if ('÷'==setupType || 1==setupLen1) {
 				inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex]+input;
 			} else {
 				inputVal[inputValCurrentIndex] = input+inputVal[inputValCurrentIndex];
@@ -85,7 +85,7 @@ function ButtonOnClick(input) {
 			if (""!=setupType && 0!=setupLen1 && 0!=setupLen2) {
 				//console.log("ButtonOnClick() 1 inputVal[inputValCurrentIndex] : "+inputVal[inputValCurrentIndex]);
 			
-				if ('÷'==setupType) {
+				if ('÷'==setupType || 1==setupLen1) {
 					inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(0, inputVal[inputValCurrentIndex].length-1);
 				} else {
 					inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(1, inputVal[inputValCurrentIndex].length);
