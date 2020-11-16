@@ -3,6 +3,24 @@
 	margin: 0;
 }
 
+.switchArea {
+  width: 100vw;
+}
+
+.switchToMobile {
+  position: relative;
+  cursor: pointer;
+  width: 6vw;
+  left: 1vw;
+}
+
+.switchToPC {
+  position: relative;
+  cursor: pointer;
+  width: 6vw;
+  left: 3vw;
+}
+
 canvas{
 	display: block;
 	width: 99vw;

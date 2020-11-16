@@ -450,3 +450,11 @@ function ustLocalStorageRemoveItem(key) {
 	localStorage.removeItem(key);
 	//sessionStorage.removeItem(key)
 }
+
+function toPCindex() {
+  parent.location.replace("./indexPC.html");
+}
+
+function toMobileindex() {
+  parent.location.replace("./index.html");
+}
