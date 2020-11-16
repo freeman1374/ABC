@@ -315,7 +315,7 @@ function GenJsonTable(showUITable) {
 		//console.log(JSON.stringify(jsonObj));
 		
 		let score = 100/answerArrayLen;
-		let TotalScore = Math.round((score*correctAnswer)*100)/100;
+		let TotalScore = Math.round(score*correctAnswer);
 		var ScoreObject = new Object;
 		ScoreObject.Table = jsonObj;
 		ScoreObject.TotalScore = TotalScore;
