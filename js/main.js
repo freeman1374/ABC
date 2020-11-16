@@ -1,25 +1,20 @@
-//var inputVal = "";
-//var noteInputVal = "";
+
+var maxInputLen = 6;
+let inputValIndexCycle = [0, 1, 2, 1];
+let DataKey = new Array("ABC_Data1", "ABC_Data2", "ABC_Data3", "ABC_Data4", "ABC_Data5", 
+						"ABC_Data6", "ABC_Data7", "ABC_Data8", "ABC_Data9", "ABC_Data10");
 
 let inputValCurrentIndex = 0;
 let inputValIndexCycleIndex = 0;
 var inputVal = new Array("", "", "");
-let inputValIndexCycle = [0, 1, 2, 1];
 
 var setupType = "";
 var setupLen1 = 0;
 var setupLen2 = 0;
 var MaxSetupLen = 4;
 
-/* var runTimer;
-var screenTimer; */
-
 var questionArray = new Array();
 var answerArray = new Array();
-
-let lockKey = false;
-let DataKey = new Array("ABC_Data1", "ABC_Data2", "ABC_Data3", "ABC_Data4", "ABC_Data5", 
-						"ABC_Data6", "ABC_Data7", "ABC_Data8", "ABC_Data9", "ABC_Data10");
 
 let ScoreJsonArray;
 let ScoreJsonDisplayResArray;
@@ -36,9 +31,6 @@ $(function(){
 });
 
 function ButtonOnClick(input) {
-	
-	if (true==lockKey) return;
-	
 	switch (input) {		
 		case 1:
 		case 2:
@@ -46,8 +38,14 @@ function ButtonOnClick(input) {
 		case 4:
 			if (0==setupLen1 && 0!=setupType.length && input<=MaxSetupLen ) {
 				setupLen1 = input;
+				if (1==setupLen1) {
+					setupLen2 = setupLen1;
+					ShowSetupInfo();
+					AskQuestion();
+				} else {
+					ShowSetupInfo();
+				}
 				console.log("ButtonOnClick() setupLen1 = "+setupLen1);
-				ShowSetupInfo();
 				break;
 			} else if (0==setupLen2 && 0!=setupType.length && input<=setupLen1) {
 				setupLen2 = input;
@@ -63,7 +61,7 @@ function ButtonOnClick(input) {
 		case 8:
 		case 9:
 		case '.':
-		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>inputVal[inputValCurrentIndex].length) {
+		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && maxInputLen>inputVal[inputValCurrentIndex].length) {
 			if ('÷'==setupType) {
 				inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex]+input;
 			} else {
