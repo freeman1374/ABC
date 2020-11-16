@@ -64,9 +64,11 @@ function ButtonOnClick(input) {
 		case 9:
 		case '.':
 		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && 8>inputVal[inputValCurrentIndex].length) {
-			//inputVal.push();
-			inputVal[inputValCurrentIndex] = input+inputVal[inputValCurrentIndex];
-			
+			if ('÷'==setupType) {
+				inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex]+input;
+			} else {
+				inputVal[inputValCurrentIndex] = input+inputVal[inputValCurrentIndex];
+			}
 			console.log("ButtonOnClick() inputVal = "+inputVal[inputValCurrentIndex]);
 			drawQuestionArea();
 		}
@@ -84,8 +86,12 @@ function ButtonOnClick(input) {
 		case 'Backspace':
 			if (""!=setupType && 0!=setupLen1 && 0!=setupLen2) {
 				//console.log("ButtonOnClick() 1 inputVal[inputValCurrentIndex] : "+inputVal[inputValCurrentIndex]);
-				//inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(0, inputVal[inputValCurrentIndex].length-1);
-				inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(1, inputVal[inputValCurrentIndex].length);
+			
+				if ('÷'==setupType) {
+					inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(0, inputVal[inputValCurrentIndex].length-1);
+				} else {
+					inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(1, inputVal[inputValCurrentIndex].length);
+				}
 				drawQuestionArea();
 				//console.log("ButtonOnClick() 2 inputVal[inputValCurrentIndex] : "+inputVal[inputValCurrentIndex]);
 			}
