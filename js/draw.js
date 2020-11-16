@@ -91,7 +91,7 @@ function ShowSetupInfo() {
 	}
 	
 	if (0!=showText.length)
-		drawTextInBox(showText, "#0000FF", 'Arial',  (drawWp*1000 - width)+drawWp*4, drawHp*6, width, SwordHp);
+		drawTextInBox(showText, "#000", 'Arial',  (drawWp*1000 - width)+drawWp*4, drawHp*6, width, SwordHp);
 	
 }
 
@@ -142,7 +142,7 @@ function drawQuestionArea() {
 		ctx.fillRect(preQ_baseline_x, preQ_baseline_y, baselineW, baselineH);
 		let showQuestionIndex = "做了 : " + qIndex + " 題";
 		if (answerArray[qIndex-1][1]) {
-			drawTextInBox(showQuestionIndex, "#0F7", 'Arial', preQ_TextW-calcTextW(SwordWp, showQuestionIndex), preQ_QuestionIndex, calcTextW(SwordWp, showQuestionIndex), SwordHp);
+			drawTextInBox(showQuestionIndex, "#00F", 'Arial', preQ_TextW-calcTextW(SwordWp, showQuestionIndex), preQ_QuestionIndex, calcTextW(SwordWp, showQuestionIndex), SwordHp);
 		} else {
 			drawTextInBox(showQuestionIndex, "#F00", 'Arial', preQ_TextW-calcTextW(SwordWp, showQuestionIndex), preQ_QuestionIndex, calcTextW(SwordWp, showQuestionIndex), SwordHp);
 		}
