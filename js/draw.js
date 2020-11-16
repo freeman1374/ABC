@@ -10,8 +10,8 @@ let LwordWp = 70;
 let LwordHp = 130;
 let MwordWp = 60;
 let MwordHp = 90;
-let SwordWp = 50;
-let SwordHp = 70;
+let SwordWp = 26;
+let SwordHp = 30;
 
 //fillRect(x, y, width, height)           畫一個實心的矩形
 //clearRect(x, y, width, height)          清除一塊兒矩形區域
@@ -104,11 +104,12 @@ function drawQuestionArea() {
 	let qIndex = -1;
 	let aIndex = -1;
 	
+	
 	let nowQ_TextW = drawWp*444;
 	let nowQ_baseline_x = drawWp*54;
 	let nowQ_baseline_y = drawHp*546;
 	let preQ_TextW = drawWp*984;
-	
+	let preQ_QuestionIndex = drawWp*120;
 	let preQ_baseline_x = drawWp*590;
 	let preQ_baseline_y = drawHp*546;
 	
@@ -139,6 +140,12 @@ function drawQuestionArea() {
 	if (0<=qIndex-1) {
 		ctx.fillStyle = "#00A0CF";
 		ctx.fillRect(preQ_baseline_x, preQ_baseline_y, baselineW, baselineH);
+		let showQuestionIndex = "做了 : " + qIndex + " 題";
+		if (answerArray[qIndex-1][1]) {
+			drawTextInBox(showQuestionIndex, "#0F7", 'Arial', preQ_TextW-calcTextW(SwordWp, showQuestionIndex), preQ_QuestionIndex, calcTextW(SwordWp, showQuestionIndex), SwordHp);
+		} else {
+			drawTextInBox(showQuestionIndex, "#F00", 'Arial', preQ_TextW-calcTextW(SwordWp, showQuestionIndex), preQ_QuestionIndex, calcTextW(SwordWp, showQuestionIndex), SwordHp);
+		}
 		drawTextInBox(questionArray[qIndex-1][2], "#00A0CF", 'Arial', preSymbolW, symbolH, LwordWp, LwordHp);
 		drawTextInBox(questionArray[qIndex-1][0], "#000", 'Arial', preQ_TextW-calcTextW(LwordWp, questionArray[qIndex-1][0]), Q_TextH_L1, calcTextW(LwordWp, questionArray[qIndex-1][0]), LwordHp);
 		drawTextInBox(questionArray[qIndex-1][1], "#000", 'Arial', preQ_TextW-calcTextW(LwordWp, questionArray[qIndex-1][1]), Q_TextH_L2, calcTextW(LwordWp, questionArray[qIndex-1][1]), LwordHp);
