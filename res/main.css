@@ -21,6 +21,13 @@
   left: 3vw;
 }
 
+.checkboxCorrectToLeave {
+  position: relative;
+  cursor: pointer;
+  width: 6vw;
+  left: 8vw;
+}
+
 canvas{
 	display: block;
 	width: 99vw;
@@ -158,10 +165,11 @@ table {
 	float: left;
     background: #dadce0;
     width: 100vw;
-    height: 92vh;
+    height: 100vh;
     font-size: x-large;
     z-index: 99999;
     position: absolute;
+	overflow: scroll;
 }
 
 #TotalScore {

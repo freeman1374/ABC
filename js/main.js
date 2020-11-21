@@ -1,4 +1,4 @@
-
+let Debug = true;
 var maxInputLen = 6;
 let inputValIndexCycle = [0, 1, 2, 1];
 let DataKey = new Array("ABC_Data1", "ABC_Data2", "ABC_Data3", "ABC_Data4", "ABC_Data5", 
@@ -6,8 +6,11 @@ let DataKey = new Array("ABC_Data1", "ABC_Data2", "ABC_Data3", "ABC_Data4", "ABC
 
 let inputValCurrentIndex = 0;
 let inputValIndexCycleIndex = 0;
+var inputValCharCurrentIndex = 0;
 var inputVal = new Array("", "", "");
 
+var randomQuestions = false;
+let QuestionType = ['+', '-', '×', '÷'];
 var setupType = "";
 var setupLen1 = 0;
 var setupLen2 = 0;
@@ -19,12 +22,15 @@ var answerArray = new Array();
 let ScoreJsonArray;
 let ScoreJsonDisplayResArray;
 
+let correctToLeaveVal = true;
+
 $(function(){
 	ExitMsgDisplay();
 	initctx();
 	FastScreen();
 	GetJsonArray();
 	resetQ();
+	$('#correctToLeave').prop("checked", true);
 	//$("#ScoreDataSelect").change(function(){
 	//	showMsgDisplay(null);
 	//});
@@ -64,8 +70,10 @@ function ButtonOnClick(input) {
 		if (0!=setupType.length && 0!=setupLen1 && 0!=setupLen2 && maxInputLen>inputVal[inputValCurrentIndex].length) {
 			if ('÷'==setupType || 1==setupLen1) {
 				inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex]+input;
+				inputValCharCurrentIndex = inputVal[inputValCurrentIndex].length-1;
 			} else {
 				inputVal[inputValCurrentIndex] = input+inputVal[inputValCurrentIndex];
+				inputValCharCurrentIndex = 0;
 			}
 			console.log("ButtonOnClick() inputVal = "+inputVal[inputValCurrentIndex]);
 			drawQuestionArea();
@@ -87,8 +95,10 @@ function ButtonOnClick(input) {
 			
 				if ('÷'==setupType || 1==setupLen1) {
 					inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(0, inputVal[inputValCurrentIndex].length-1);
+					inputValCharCurrentIndex = inputValCharCurrentIndex = inputVal[inputValCurrentIndex].length-1;;
 				} else {
 					inputVal[inputValCurrentIndex] = inputVal[inputValCurrentIndex].substring(1, inputVal[inputValCurrentIndex].length);
+					inputValCharCurrentIndex = 0;
 				}
 				drawQuestionArea();
 				//console.log("ButtonOnClick() 2 inputVal[inputValCurrentIndex] : "+inputVal[inputValCurrentIndex]);
@@ -103,6 +113,13 @@ function ButtonOnClick(input) {
 					inputValIndexCycleIndex++;
 				}
 				inputValCurrentIndex = inputValIndexCycle[inputValIndexCycleIndex];
+				
+				if ('÷'==setupType || 1==setupLen1) {
+					inputValCharCurrentIndex = inputValCharCurrentIndex = inputVal[inputValCurrentIndex].length-1;;
+				} else {
+					inputValCharCurrentIndex = 0;
+				}
+				
 				drawQuestionArea();
 				console.log("ButtonOnClick() note inputValCurrentIndex = "+inputValCurrentIndex);
 			}
@@ -110,7 +127,7 @@ function ButtonOnClick(input) {
 		
 		case 'Exit':
 			if (0<answerArray.length) {
-				CheckAns();
+				CheckAns(correctToLeaveVal);
 				if (confirm("現在就檢視成績?")) {
 					GenJsonTable(true);
 					//resetQ();
@@ -126,7 +143,7 @@ function ButtonOnClick(input) {
 		break;
 		
 		case 'Esc':
-			CheckAns();
+			CheckAns(correctToLeaveVal);
 			if (confirm("確定重新開始?")) {
 				if (0<answerArray.length)
 					GenJsonTable(false);
@@ -139,7 +156,17 @@ function ButtonOnClick(input) {
 			}
 		break;
 		case 'Enter':
-			CheckAns();
+			if (""!=setupType && 0!=setupLen1 && 0!=setupLen2) {
+				CheckAns(correctToLeaveVal);
+			} else {
+				setupType = 'Enter';
+				setupLen1 = 0;
+				setupLen2 = 0;
+				randomQuestions = true;
+				inuptReset();
+				ShowSetupInfo();
+				console.log("ButtonOnClick() "+input);
+			}
 		break;
 		case '+':
 		case '-':
@@ -147,6 +174,8 @@ function ButtonOnClick(input) {
 			MaxSetupLen = 4;
 			setupLen1 = 0;
 			setupLen2 = 0;
+			randomQuestions = false;
+			inuptReset();
 			questionArray.pop();
 			ShowSetupInfo();
 			console.log("ButtonOnClick() "+input);
@@ -157,6 +186,8 @@ function ButtonOnClick(input) {
 			MaxSetupLen = 2;
 			setupLen1 = 0;
 			setupLen2 = 0;
+			randomQuestions = false;
+			inuptReset();
 			questionArray.pop();
 			ShowSetupInfo();
 			console.log("ButtonOnClick() "+input);
@@ -171,14 +202,17 @@ function getRandom(min,max){
 	return Math.floor(Math.random()*(max-min+1))+min;
 };
 
+function inuptReset() {
+	inputValCurrentIndex = 0;
+	inputValIndexCycleIndex = 0;
+	inputValCharCurrentIndex = 0;
+	inputVal = new Array("", "", "");
+}
+
 function resetQ() {
 	//clearInterval(runTimer);
 	//runTimer = setInterval(setFunc, 1000);
-	
-	inputValIndexCycleIndex = 0;
-	inputValCurrentIndex = 0;
-	inputVal = new Array("", "", "");
-	
+	inuptReset();
 	setupType = "";
 	setupLen1 = 0;
 	setupLen2 = 0;
@@ -189,11 +223,23 @@ function resetQ() {
 	setNoteKeyHiLight(false);
 }
 
+function onclickCorrectToLeave() {
+	if (0<questionArray.length) {
+		$('#correctToLeave').prop("checked", correctToLeaveVal);
+		alert("只能在還沒作答前切換");
+	} else {
+		correctToLeaveVal = $('#correctToLeave').prop("checked");
+		if (Debug) console.log("onclickCorrectToLeave() correctToLeaveVal : "+correctToLeaveVal);
+	}
+}
+
 function AskQuestion() {
 	//'×''÷'
 	let min1 = 1, max1 = 9;
 	let min2 = 1, max2 = 9;
+	
 	let val_1, val_2;
+	
 	if (2===setupLen1) {
 		min1 = 10;
 		max1 = 99;
@@ -215,7 +261,15 @@ function AskQuestion() {
 		min2 = 1000;
 		max2 = 9999;
 	}
-		
+	
+	if (randomQuestions) console.log("AskQuestion() Random Questions!");
+	
+	if (randomQuestions && 2>=setupLen1) {
+		setupType = QuestionType[getRandom(0, 3)];
+	} else if (randomQuestions) {
+		setupType = QuestionType[getRandom(0, 1)];
+	}
+	
 	if ('-'==setupType) {
 		do {
 			val_1 = getRandom(min1, max1);
@@ -241,7 +295,12 @@ function AskQuestion() {
 	drawQuestionArea();
 }
 
-function CheckAns() {
+/*
+*
+*	@params bool The answer is correct to leave
+*/
+function CheckAns(correctToLeave) {
+	correctToLeave = correctToLeave || false;
 	let index = questionArray.length;
 	let ret = false;
 	if (0!=index && setupLen1 != 0 && setupLen2 != 0 && 0<inputVal.length ) {
@@ -287,10 +346,17 @@ function CheckAns() {
 		} else {
 			console.log("ButtonOnClick() wrong answer");
 		}
+		
 		inputValIndexCycleIndex = 0;
 		inputValCurrentIndex = 0;
 		inputVal = new Array("", "", "");
-		AskQuestion();
+		if (!ret&&correctToLeave) {
+			console.log("ButtonOnClick() The answer is correct to leave");
+			questionArray.push([v1, v2, setupType]);
+			drawQuestionArea();
+		} else {
+			AskQuestion();
+		}
 	}
 	return ret;
 }
@@ -300,26 +366,61 @@ function GenJsonTable(showUITable) {
 	let answerArrayLen = answerArray.length;
 	let jsonObj=[];
 	let correctAnswer = 0;
+	let Q_CorrectToLeaveArray = new Array();
+	let QuestionNumberOfCorrectToLeaveArray = 0;
 	if (answerArrayLen == (questionArrayLen-1)) {
 		for (let index=0;index<answerArrayLen;index++) {
-			var obj = new Object;
+			let obj = new Object;
 			obj.Question = questionArray[index][0] + questionArray[index][2] + questionArray[index][1];
 			obj.Answer = answerArray[index][0];
 			obj.CorrectAnswer = answerArray[index][1];
 			obj.AnswerDate = answerArray[index][2];
+			
 			if (true==answerArray[index][1]) {
 				correctAnswer++;
 			}
+			
+			if (correctToLeaveVal && 0>=Q_CorrectToLeaveArray.length) {
+				Q_CorrectToLeaveArray.push([obj.Question, index, answerArray[index][1]]);
+				QuestionNumberOfCorrectToLeaveArray++;
+
+			} else if (correctToLeaveVal && (Q_CorrectToLeaveArray[Q_CorrectToLeaveArray.length-1][0]!=obj.Question)) {
+				Q_CorrectToLeaveArray.push([obj.Question, index, answerArray[index][1]]);
+				QuestionNumberOfCorrectToLeaveArray++;
+			}
+			
+			if (correctToLeaveVal) {
+				obj.QuestionNumber = QuestionNumberOfCorrectToLeaveArray+1;
+			}else {
+				obj.QuestionNumber = index+1;
+			}
+			
 			jsonObj.push(obj);
 		}
 		//console.log(JSON.stringify(jsonObj));
+		let ScoreObject = new Object;
 		
-		let score = 100/answerArrayLen;
-		let TotalScore = Math.round(score*correctAnswer);
-		var ScoreObject = new Object;
+		if (correctToLeaveVal) {
+			index = 0;
+			correctAnswer = 0;
+			for (index in Q_CorrectToLeaveArray) {
+				if (Q_CorrectToLeaveArray[index][2]) {
+					correctAnswer++;
+				}
+			}
+			
+			let score = 100/Q_CorrectToLeaveArray.length;
+			let TotalScore = Math.round(score*correctAnswer);
+			ScoreObject.TotalScore = TotalScore;
+		} else {
+			let score = 100/answerArrayLen;
+			let TotalScore = Math.round(score*correctAnswer);
+			ScoreObject.TotalScore = TotalScore;
+		}
+		
 		ScoreObject.Table = jsonObj;
-		ScoreObject.TotalScore = TotalScore;
-		var seconds = Date.now();
+		
+		let seconds = Date.now();
 		ScoreObject.UpDateTime = seconds;
 		
 		if (showUITable)
@@ -456,9 +557,9 @@ function ustLocalStorageRemoveItem(key) {
 }
 
 function toPCindex() {
-  parent.location.replace("./indexPC.html");
+	parent.location.replace("./indexPC.html");
 }
 
 function toMobileindex() {
-  parent.location.replace("./index.html");
+	parent.location.replace("./index.html");
 }

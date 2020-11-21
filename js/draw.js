@@ -1,3 +1,5 @@
+var UIDebug = true;
+
 let drawW = 1000;
 let drawH = 1000;
 
@@ -33,7 +35,7 @@ function calcTextW(wordW, string) {
 	if (textWtmp>textWMax) {
 		textWtmp = textWMax;
 	}
-	//console.log("stringLength : "+stringLength +" textWtmp :"+textWtmp);
+	if (UIDebug) console.log("stringLength : "+stringLength +" textWtmp :"+textWtmp);
 	return textWtmp;
 }
 
@@ -47,7 +49,7 @@ function initctx() {
 }
 
 function FastScreen() {
-	let showText = "輸入+-×÷選擇題目";
+	let showText = "輸入+-×÷↵選擇題目";
 	drawTextInBox(showText, "#204000", 'Arial',  drawWp*(1000/2)-(calcTextW(LwordWp, showText)/2), drawHp*(1000/2)-LwordHp/2, calcTextW(LwordWp, showText), LwordHp);
 	ctx.strokeRect(drawWp*2, drawHp*2, drawWp*(998), drawHp*(998));
 	$('#Exit').html('查看紀錄');
@@ -65,6 +67,8 @@ function ShowSetupInfo() {
 		showText += "乘法";
 	} else if ('÷'==setupType) {
 		showText += "除法";
+	} else if ('Enter'==setupType) {
+		showText += "隨機"
 	}
 	let width = calcTextW(SwordWp, showText);
 	if (setupLen1 == 0) {
@@ -74,7 +78,7 @@ function ShowSetupInfo() {
 	}
 	
 	if (setupLen1 != 0) {
-		showText += " 第一位數:"+setupLen1;
+		showText += " 位數:"+setupLen1+"/";
 		width = calcTextW(SwordWp, showText);
 		if (setupLen2 == 0) {
 			clearFastScreen();
@@ -84,7 +88,7 @@ function ShowSetupInfo() {
 	}
 	
 	if (setupLen2 != 0) {
-		showText += " 第二位數:"+setupLen2;
+		showText += setupLen2;
 		width = calcTextW(SwordWp, showText);
 		clearFastScreen();
 		$('#Exit').html('檢視成績');
@@ -185,7 +189,8 @@ function drawQuestionArea() {
 			Q_TextH = textLine5Y;
 		}
 		if (inputValCurrentIndex==inputValIndex) {
-			drawTextInStroke(inputVal[inputValIndex], textColor, 'Arial', Q_TextW, Q_TextH, ansLen, LwordHp);
+			//inputValCharCurrentIndex
+			drawTextInStroke(inputVal[inputValIndex], textColor, 'Arial', Q_TextW, Q_TextH, ansLen, LwordHp, "#00F");
 		} else {
 			drawTextInBox(inputVal[inputValIndex], textColor, 'Arial', Q_TextW, Q_TextH, ansLen, LwordHp);
 		}
@@ -196,13 +201,14 @@ function drawTextInBox(txt, fillStyle, font, x, y, w, h, angle) {
 	drawTextByChar(txt, fillStyle, font, x, y, w, h, angle, false);
 }
 
-function drawTextInStroke(txt, fillStyle, font, x, y, w, h, angle) {
-	drawTextByChar(txt, fillStyle, font, x, y, w, h, angle, true);
+function drawTextInStroke(txt, fillStyle, font, x, y, w, h, strokeRectColor) {
+	drawTextByChar(txt, fillStyle, font, x, y, w, h, 0, true, strokeRectColor);
 }
 
-function drawTextByChar(txt, fillStyle, font, x, y, w, h, angle, strokeRect) {
+function drawTextByChar(txt, fillStyle, font, x, y, w, h, angle, strokeRect, strokeRectColor) {
 	angle = angle || 0;
 	strokeRect = strokeRect || false;
+	strokeRectColor = strokeRectColor || fillStyle;
 	let fontHeight = 20;
 	let hMargin = 4;
 	let stringLength;
@@ -220,22 +226,26 @@ function drawTextByChar(txt, fillStyle, font, x, y, w, h, angle, strokeRect) {
 		var txtArray = txt.split('');
 		for (let txtIndex=0;txtIndex<stringLength;txtIndex++) {
 			charx = x + (charw*txtIndex);
-			drawText(txtArray[txtIndex], fillStyle, font, charx, y, charw, h, angle, strokeRect);
+			if (txtIndex==inputValCharCurrentIndex)
+				drawText(txtArray[txtIndex], fillStyle, font, charx, y, charw, h, angle, strokeRect, strokeRectColor);
+			else
+				drawText(txtArray[txtIndex], fillStyle, font, charx, y, charw, h, angle, false);
 		}
 	} else {
-		drawText(txt, fillStyle, font, x, y, w, h, angle, strokeRect);
+		drawText(txt, fillStyle, font, x, y, w, h, angle, strokeRect, strokeRectColor);
 	}
 }
 
-function drawText(txt, fillStyle, font, x, y, w, h, angle, strokeRect) {
+function drawText(txt, fillStyle, font, x, y, w, h, angle, strokeRect, strokeRectColor) {
 	angle = angle || 0;
 	strokeRect = strokeRect || false;
+	strokeRectColor = strokeRectColor || fillStyle;
 	var fontHeight = 20;
 	var hMargin = 4;
 	ctx.font = fontHeight + 'px ' + font;
 	ctx.textAlign = 'left';
 	ctx.textBaseline = 'top';
-	ctx.fillStyle = fillStyle;
+	ctx.strokeStyle = strokeRectColor;
 	var txtWidth = ctx.measureText(txt).width + 2 * hMargin;
 	ctx.save();
 	ctx.translate(x+w/2, y);
@@ -243,6 +253,7 @@ function drawText(txt, fillStyle, font, x, y, w, h, angle, strokeRect) {
 	if (strokeRect) {
 		ctx.strokeRect(-w/2, 0, w, h);//框線
 	}
+	ctx.fillStyle = fillStyle;
 	ctx.scale(w / txtWidth, h / fontHeight);
 	ctx.translate(hMargin, 0)
 	ctx.fillText(txt, -txtWidth/2, h/64);
@@ -259,22 +270,31 @@ function showMsgDisplay(data) {
 		data = ScoreJsonDisplayResArray[ScoreJsonindex];
 	}
 	if (data.hasOwnProperty("Table")) {
-		//console.log(data);
+		if (UIDebug) console.log(data);
 		let trItemHead;
 		let i;
 		let infoLen = Object.keys(data.Table).length;
 		$("#tbody_makeEditable").html("");
-		$("#TotalScore").html("總分 : "+data.TotalScore);
+		$("#TotalScore").html("總分："+data.TotalScore);
 		
 		for (i=0;i<infoLen;i++) {
-			if((i % 2)==0){
+			let PreQuestionNumber;
+			try {
+				PreQuestionNumber = data.Table[i-1].QuestionNumber;
+			} catch {
+				PreQuestionNumber = -1;
+			}
+			if (!data.Table[i].CorrectAnswer || data.Table[i].QuestionNumber==PreQuestionNumber) {
+				trItemHead = "<tr id=\""+i+"\" bgcolor=\"#FF2222\" >";
+			}else if((i % 2)==0){
 				trItemHead = "<tr id=\""+i+"\" bgcolor=\"#ededed\" >";
 			} else {
-				trItemHead = "<tr id=\""+i+"\">";			
-			}
+				trItemHead = "<tr id=\""+i+"\" bgcolor=\"#CCC\" >";
+			} 
 			$('#tbody_makeEditable').append(
 					trItemHead+
-					'<td class="tdval">'+ (i+1) +"</td>"+
+					//'<td class="tdval">'+ (i+1) +"</td>"+
+					'<td class="tdval">'+ data.Table[i].QuestionNumber +"</td>"+
 					'<td class="tdval">'+ data.Table[i].Question +"</td>"+
 					'<td class="tdval">'+ data.Table[i].Answer +"</td>"+
 					'<td class="tdval">'+ data.Table[i].CorrectAnswer +"</td>"+
