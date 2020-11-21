@@ -38,6 +38,65 @@ window.addEventListener('beforeunload',function(event){
 	event.returnValue="";
 })
 
+function keyFunction() {
+	if (Debug) console.log("keyFunction() Key code = " + event.keyCode);
+	let ret = true;
+	
+	if (event.keyCode == 107 || event.keyCode == 90) { 
+		//add 107	(z 90)
+		ButtonOnClick('+');
+		ret = false;
+	} else if (event.keyCode == 109 || event.keyCode == 88) { 
+		//subtract	109	(x 88)
+		ButtonOnClick('-');
+		ret = false;
+	} else if (event.keyCode == 106 || event.keyCode == 67) { 
+		//multiply	106	(c 67)
+		ButtonOnClick('×');
+		ret = false;
+	} else if (event.keyCode == 111 || event.keyCode == 86) { 
+		//divide 111 (v 86)
+		ButtonOnClick('÷');
+		ret = false;
+	} else if (event.keyCode == 110 || event.keyCode == 190) { 
+		//decimal point	110	(period	190)
+		ButtonOnClick('.');
+		if (Debug) console.log("keyFunction() Esc");
+		ret = false;
+	} else if (event.keyCode >= 48 && event.keyCode <= 57) { 
+		// 0-9 only
+		ButtonOnClick(event.keyCode-48);
+		ret = false;
+	} else if (event.keyCode >= 96 && event.keyCode <= 105) {
+		// 0-9 only
+		ButtonOnClick(event.keyCode-96);
+		ret = false;
+	} else if (event.keyCode==27) {
+		if (Debug) console.log("keyFunction() Esc")
+		ButtonOnClick('Esc');
+		ret = false;
+	} else if (event.keyCode==8) {
+		if (Debug) console.log("keyFunction() Backspace")
+		ButtonOnClick('Backspace');
+		ret = false;
+	} else if (event.keyCode==9) {
+		if (Debug) console.log("keyFunction() TAB")
+		ButtonOnClick('Note');
+		ret = false;
+	} else if (event.keyCode==13) {
+		if (Debug) console.log("keyFunction() Enter")
+		ButtonOnClick('Enter');
+		ret = false;
+	} else if (event.keyCode==81) {
+		//Q 81
+		if (Debug) console.log("keyFunction() Q")
+		ButtonOnClick('Exit');
+		ret = false;
+	}
+	return ret;
+}
+document.onkeydown=keyFunction;
+
 function ButtonOnClick(input) {
 	switch (input) {		
 		case 1:
