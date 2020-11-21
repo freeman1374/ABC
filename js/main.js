@@ -1,4 +1,4 @@
-let Debug = true;
+let Debug = false;
 var maxInputLen = 6;
 let inputValIndexCycle = [0, 1, 2, 1];
 let DataKey = new Array("ABC_Data1", "ABC_Data2", "ABC_Data3", "ABC_Data4", "ABC_Data5", 
@@ -24,17 +24,19 @@ let ScoreJsonDisplayResArray;
 
 let correctToLeaveVal = true;
 
-$(function(){
+$(document).ready(function(){
 	ExitMsgDisplay();
 	initctx();
 	FastScreen();
 	GetJsonArray();
 	resetQ();
 	$('#correctToLeave').prop("checked", true);
-	//$("#ScoreDataSelect").change(function(){
-	//	showMsgDisplay(null);
-	//});
 });
+
+window.addEventListener('beforeunload',function(event){
+	GenJsonTable(false);
+	event.returnValue="";
+})
 
 function ButtonOnClick(input) {
 	switch (input) {		
@@ -51,11 +53,11 @@ function ButtonOnClick(input) {
 				} else {
 					ShowSetupInfo();
 				}
-				console.log("ButtonOnClick() setupLen1 = "+setupLen1);
+				if (Debug) console.log("ButtonOnClick() setupLen1 = "+setupLen1);
 				break;
 			} else if (0==setupLen2 && 0!=setupType.length && input<=setupLen1) {
 				setupLen2 = input;
-				console.log("ButtonOnClick() setupLen2 = "+setupLen2);
+				if (Debug) console.log("ButtonOnClick() setupLen2 = "+setupLen2);
 				ShowSetupInfo();
 				AskQuestion();
 				break;
@@ -75,7 +77,7 @@ function ButtonOnClick(input) {
 				inputVal[inputValCurrentIndex] = input+inputVal[inputValCurrentIndex];
 				inputValCharCurrentIndex = 0;
 			}
-			console.log("ButtonOnClick() inputVal = "+inputVal[inputValCurrentIndex]);
+			if (Debug) console.log("ButtonOnClick() inputVal = "+inputVal[inputValCurrentIndex]);
 			drawQuestionArea();
 		}
 		break;
@@ -85,7 +87,7 @@ function ButtonOnClick(input) {
 				inputValCurrentIndex = 0;
 				inputVal = new Array("", "", "");
 				drawQuestionArea();
-				console.log("ButtonOnClick() clear inputVal");
+				if (Debug) console.log("ButtonOnClick() clear inputVal");
 			}
 		break;
 		
@@ -121,7 +123,7 @@ function ButtonOnClick(input) {
 				}
 				
 				drawQuestionArea();
-				console.log("ButtonOnClick() note inputValCurrentIndex = "+inputValCurrentIndex);
+				if (Debug) console.log("ButtonOnClick() note inputValCurrentIndex = "+inputValCurrentIndex);
 			}
 		break;
 		
@@ -131,7 +133,7 @@ function ButtonOnClick(input) {
 				if (confirm("現在就檢視成績?")) {
 					GenJsonTable(true);
 					//resetQ();
-					console.log("ButtonOnClick() Exit");
+					if (Debug) console.log("ButtonOnClick() Exit");
 				}
 			} else {
 				if (0<ScoreJsonDisplayResArray.length) {
@@ -152,7 +154,7 @@ function ButtonOnClick(input) {
 				ShowSetupInfo();
 				clearFastScreen();
 				FastScreen();
-				console.log("ButtonOnClick() Esc");
+				if (Debug) console.log("ButtonOnClick() Esc");
 			}
 		break;
 		case 'Enter':
@@ -165,7 +167,7 @@ function ButtonOnClick(input) {
 				randomQuestions = true;
 				inuptReset();
 				ShowSetupInfo();
-				console.log("ButtonOnClick() "+input);
+				if (Debug) console.log("ButtonOnClick() "+input);
 			}
 		break;
 		case '+':
@@ -178,7 +180,7 @@ function ButtonOnClick(input) {
 			inuptReset();
 			questionArray.pop();
 			ShowSetupInfo();
-			console.log("ButtonOnClick() "+input);
+			if (Debug) console.log("ButtonOnClick() "+input);
 		break;
 		case '×':
 		case '÷':
@@ -190,7 +192,7 @@ function ButtonOnClick(input) {
 			inuptReset();
 			questionArray.pop();
 			ShowSetupInfo();
-			console.log("ButtonOnClick() "+input);
+			if (Debug) console.log("ButtonOnClick() "+input);
 		break;
 		default:
 			console.log('out of ${input}.');
@@ -290,7 +292,7 @@ function AskQuestion() {
 		val_2 = getRandom(min2, max2);
 	}
 	
-	console.log('Question '+val_1+setupType+val_2+" ?");
+	if (Debug) console.log('Question '+val_1+setupType+val_2+" ?");
 	questionArray.push([val_1, val_2, setupType]);
 	drawQuestionArea();
 }
@@ -319,7 +321,7 @@ function CheckAns(correctToLeave) {
 		if (0==inputAns)
 			return;
 		
-		console.log("Question ("+index+ ") : "+v1+type+v2 +"="+ inputAns + "index inputValIndex :"+ inputValIndex);
+		if (Debug) console.log("Question ("+index+ ") : "+v1+type+v2 +"="+ inputAns + "index inputValIndex :"+ inputValIndex);
 		
 		if ('+'==type) {
 			if ((v1+v2)==inputAns)
@@ -331,7 +333,7 @@ function CheckAns(correctToLeave) {
 			if ((v1*v2)==inputAns)
 				ret = true;
 		} else if ('÷'==type) {
-			console.log("Ans : "+ Math.round((v1/v2)*100)/100);
+			if (Debug) console.log("Ans : "+ Math.round((v1/v2)*100)/100);
 			if ((Math.round((v1/v2)*100)/100)==inputAns) {
 				ret = true;
 			}
@@ -342,16 +344,16 @@ function CheckAns(correctToLeave) {
 		answerArray.push([inputAns, ret, now.toISOString().slice(0, -5)]);
 		
 		if (ret) {
-			console.log("ButtonOnClick() correct answer");
+			if (Debug) console.log("ButtonOnClick() correct answer");
 		} else {
-			console.log("ButtonOnClick() wrong answer");
+			if (Debug) console.log("ButtonOnClick() wrong answer");
 		}
 		
 		inputValIndexCycleIndex = 0;
 		inputValCurrentIndex = 0;
 		inputVal = new Array("", "", "");
 		if (!ret&&correctToLeave) {
-			console.log("ButtonOnClick() The answer is correct to leave");
+			if (Debug) console.log("ButtonOnClick() The answer is correct to leave");
 			questionArray.push([v1, v2, setupType]);
 			drawQuestionArea();
 		} else {
@@ -454,7 +456,7 @@ function SetJsonArrayNewData(ScoreObject) {
 	
 	if (0<ScoreJsonDisplayResArray.length && ScoreJsonDisplayResArray[0].hasOwnProperty('Table')) {
 		if (ScoreJsonDisplayResArray[0].Table[Object.keys(ScoreJsonDisplayResArray[0].Table).length-1].AnswerDate == ScoreObject.Table[Object.keys(ScoreObject.Table).length-1].AnswerDate) {
-			console.log("SetJsonArrayNewData Exit.");
+			if (Debug) console.log("SetJsonArrayNewData Exit.");
 			return;
 		}
 	}
@@ -484,7 +486,7 @@ function SetJsonArrayNewData(ScoreObject) {
 	
 	ScoreObject.SaveKey = SaveKey;
 	let jsonBuf = JSON.stringify(ScoreObject)
-	console.log(jsonBuf);
+	if (Debug) console.log(jsonBuf);
 	ustLocalStorageSetItem(SaveKey, jsonBuf);
 	GetJsonArray();
 }

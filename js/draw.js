@@ -1,4 +1,4 @@
-var UIDebug = true;
+var UIDebug = false;
 
 let drawW = 1000;
 let drawH = 1000;
