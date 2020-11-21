@@ -284,22 +284,27 @@ function showMsgDisplay(data) {
 			} catch {
 				PreQuestionNumber = -1;
 			}
-			if (!data.Table[i].CorrectAnswer || data.Table[i].QuestionNumber==PreQuestionNumber) {
-				trItemHead = "<tr id=\""+i+"\" bgcolor=\"#FF2222\" >";
-			}else if((i % 2)==0){
+			
+			if ((i % 2)==0){
 				trItemHead = "<tr id=\""+i+"\" bgcolor=\"#ededed\" >";
 			} else {
 				trItemHead = "<tr id=\""+i+"\" bgcolor=\"#CCC\" >";
-			} 
+			}
+			
+			let fontColor = "#000";
+			if (!data.Table[i].CorrectAnswer || data.Table[i].QuestionNumber==PreQuestionNumber) {
+				fontColor = "#D33";
+			}
+			
 			$('#tbody_makeEditable').append(
 					trItemHead+
 					//'<td class="tdval">'+ (i+1) +"</td>"+
-					'<td class="tdval">'+ data.Table[i].QuestionNumber +"</td>"+
-					'<td class="tdval">'+ data.Table[i].Question +"</td>"+
-					'<td class="tdval">'+ data.Table[i].Answer +"</td>"+
-					'<td class="tdval">'+ data.Table[i].CorrectAnswer +"</td>"+
-					'<td class="tdval">'+ data.Table[i].AnswerDate +"</td>"+
-					"</tr>");
+					'<td class="tdval"><font color='+fontColor+'>'+ data.Table[i].QuestionNumber +'</font></td>'+
+					'<td class="tdval"><font color='+fontColor+'>'+ data.Table[i].Question +'</font></td>'+
+					'<td class="tdval"><font color='+fontColor+'>'+ data.Table[i].Answer +'</font></td>'+
+					'<td class="tdval"><font color='+fontColor+'>'+ data.Table[i].CorrectAnswer +'</font></td>'+
+					'<td class="tdval"><font color='+fontColor+'>'+ data.Table[i].AnswerDate +'</font></td>'+
+					'</tr>');
 		}
 		
 		$('#dmsg').show();

@@ -390,7 +390,7 @@ function GenJsonTable(showUITable) {
 			}
 			
 			if (correctToLeaveVal) {
-				obj.QuestionNumber = QuestionNumberOfCorrectToLeaveArray+1;
+				obj.QuestionNumber = QuestionNumberOfCorrectToLeaveArray;
 			}else {
 				obj.QuestionNumber = index+1;
 			}
