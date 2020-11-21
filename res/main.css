@@ -5,27 +5,33 @@
 
 .switchArea {
   width: 100vw;
+  height: 1.6vh;
 }
 
 .switchToMobile {
-  position: relative;
+  position: fixed;
   cursor: pointer;
-  width: 6vw;
+  width: 8vw;
   left: 1vw;
 }
 
 .switchToPC {
-  position: relative;
+  position: fixed;
   cursor: pointer;
-  width: 6vw;
-  left: 3vw;
+  width: 8vw;
+  left: 10vw;
 }
 
 .checkboxCorrectToLeave {
-  position: relative;
+  position: fixed;
   cursor: pointer;
-  width: 6vw;
-  left: 8vw;
+  right: 1vw;
+}
+
+.checkboxDifficulty {
+  position: fixed;
+  cursor: pointer;
+  right: 25vw;
 }
 
 canvas{

@@ -34,8 +34,14 @@
 <div class="switchArea">
 <a class="switchToMobile" onclick="toMobileindex()">行動版</a>
 <a class="switchToPC" onclick="toPCindex()">桌面版</a>
-<input type="checkbox" class="checkboxCorrectToLeave" id="correctToLeave" value='true' onclick="onclickCorrectToLeave()">
-<label class="checkboxCorrectToLeave" for="correctToLeave"> 答對才能換下一題</label>
+<div class="checkboxCorrectToLeave">
+<input type="checkbox" id="correctToLeave" value='true' onclick="onclickCorrectToLeave()">
+<label for="correctToLeave">答對才能換下一題</label>
+</div>
+<div class="checkboxDifficulty">
+<input type="checkbox" id="difficulty" value='true' onclick="onclickDifficulty()">
+<label for="difficulty">除法難度</label>
+</div>
 </div>
 
 <canvas id="mainCanvas" width="1000px" height="1000px"></canvas>
@@ -73,7 +79,6 @@
 	<td>  <div class="PaQdxb mF5fo G7BHUb"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick('.')" role="button" tabindex="0" aria-label="點">.</div> </div> </td>
 	<td>  <div class="PaQdxb A2W7l"> <div class="XRsWPe AOvabd" onclick="ButtonOnClick(0)" role="button" tabindex="0">0</div> </div> </td>
 	<td>  <div class="PaQdxb mF5fo G7BHUb"> <div  class="XRsWPe MEdqYd EnterKey" onclick="ButtonOnClick('Enter')" role="button" tabindex="0" aria-label="Enter">↵</div> </div> </td>
-	
 	<td>  <div class="PaQdxb mF5fo"> <div class="XRsWPe MEdqYd" onclick="ButtonOnClick('÷')" role="button" tabindex="0" aria-label="除">÷</div> </div> </td>
 	</tr>
 </tbody>

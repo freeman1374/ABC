@@ -22,7 +22,8 @@ var answerArray = new Array();
 let ScoreJsonArray;
 let ScoreJsonDisplayResArray;
 
-let correctToLeaveVal = true;
+let correctToLeaveVal;
+let difficulty;
 
 $(document).ready(function(){
 	ExitMsgDisplay();
@@ -30,7 +31,10 @@ $(document).ready(function(){
 	FastScreen();
 	GetJsonArray();
 	resetQ();
-	$('#correctToLeave').prop("checked", true);
+	correctToLeaveVal = ustLocalStorageGetItem("correctToLeave") == "true";
+	difficulty = ustLocalStorageGetItem("difficulty") == "true";
+	$('#correctToLeave').prop("checked", correctToLeaveVal);
+	$('#difficulty').prop("checked", difficulty);
 });
 
 window.addEventListener('beforeunload',function(event){
@@ -290,9 +294,22 @@ function onclickCorrectToLeave() {
 		alert("只能在還沒作答前切換");
 	} else {
 		correctToLeaveVal = $('#correctToLeave').prop("checked");
+		ustLocalStorageSetItem("correctToLeave", correctToLeaveVal);
 		if (Debug) console.log("onclickCorrectToLeave() correctToLeaveVal : "+correctToLeaveVal);
 	}
 }
+
+function onclickDifficulty() {
+	if (0<questionArray.length) {
+		$('#difficulty').prop("checked", difficulty);
+		alert("只能在還沒作答前切換");
+	} else {
+		difficulty = $('#difficulty').prop("checked");
+		ustLocalStorageSetItem("difficulty", difficulty);
+		if (Debug) console.log("onclickDifficulty() difficulty : "+difficulty);
+	}
+}
+
 
 function AskQuestion() {
 	//'×''÷'
@@ -332,20 +349,28 @@ function AskQuestion() {
 	}
 	
 	if ('-'==setupType) {
-		do {
+		// if (difficulty) {
+			// val_1 = getRandom(min1, max1);
+			// val_2 = getRandom(min2, max2);
+		// } else {
+			do {
+				val_1 = getRandom(min1, max1);
+				val_2 = getRandom(min2, max2);
+				if (val_2 > val_1) {
+					[val_1, val_2] = [val_2, val_1];
+				}
+			} while((val_1-val_2)<=0);
+		// }
+	} else if ('÷'==setupType) {
+		if (difficulty) {
 			val_1 = getRandom(min1, max1);
 			val_2 = getRandom(min2, max2);
-			if (val_2 > val_1) {
-				[val_1, val_2] = [val_2, val_1];
-			}
-		} while((val_1-val_2)<=0);
-	} else if ('÷'==setupType) {
-		//do {
-			//val_1 = getRandom(min1, max1);
-			//val_2 = getRandom(min2, max2);
-		//} while((val_1!=val_2)&&((val_1%val_2)!=0));
-		val_1 = getRandom(min1, max1);
-		val_2 = getRandom(min2, max2);
+		} else {
+			do {
+				val_1 = getRandom(min1, max1);
+				val_2 = getRandom(min2, max2);
+			} while((val_1!=val_2)&&((val_1%val_2)!=0));
+		}
 	} else {
 		val_1 = getRandom(min1, max1);
 		val_2 = getRandom(min2, max2);
