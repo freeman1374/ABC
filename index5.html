@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<title>WEB ABC01 — 豎式數學練習 (HTML5)</title>
+<link rel="stylesheet" href="./res/abc5.css">
+<script src="./js/abc5.js" defer></script>
+</head>
+<body>
+
+<header id="topbar">
+  <div class="brand">ABC 豎式計算練習</div>
+  <div class="toggles">
+    <button id="btnCorrectToLeave" class="toggle" data-on="0" aria-label="答對才能換下一題">答對才能換下一題</button>
+    <button id="btnDifficulty" class="toggle" data-on="0" aria-label="除法難度">除法難度</button>
+  </div>
+</header>
+
+<main id="stage">
+  <canvas id="mainCanvas"></canvas>
+
+  <div id="keypad">
+    <button class="key top" data-key="Esc">重新開始</button>
+    <button class="key top exit" id="btnExit" data-key="Exit">查看紀錄</button>
+    <button class="key top" data-key="Backspace">⌫</button>
+    <button class="key top note" data-key="Note">↹ 速記</button>
+
+    <button class="key num" data-key="7">7</button>
+    <button class="key num" data-key="8">8</button>
+    <button class="key num" data-key="9">9</button>
+    <button class="key op" data-key="+">+</button>
+
+    <button class="key num" data-key="4">4</button>
+    <button class="key num" data-key="5">5</button>
+    <button class="key num" data-key="6">6</button>
+    <button class="key op" data-key="-">−</button>
+
+    <button class="key num" data-key="1">1</button>
+    <button class="key num" data-key="2">2</button>
+    <button class="key num" data-key="3">3</button>
+    <button class="key op" data-key="×">×</button>
+
+    <button class="key op" data-key=".">.</button>
+    <button class="key num" data-key="0">0</button>
+    <button class="key enter" data-key="Enter">↵</button>
+    <button class="key op" data-key="÷">÷</button>
+  </div>
+</main>
+
+<div id="dmsg" hidden>
+  <div class="panelHead">
+    <button id="btnCloseMsg" class="panelBtn">關閉紀錄</button>
+    <button id="btnClearRec" class="panelBtn danger">清除紀錄</button>
+    <p id="TotalScore"></p>
+    <select id="ScoreDataSelect" onchange="scoreSelectChanged()"></select>
+  </div>
+  <table id="scoreTable">
+    <thead>
+      <tr><th>#</th><th>問題</th><th>答案</th><th>答對</th><th>作答時間</th></tr>
+    </thead>
+    <tbody id="tbody_makeEditable"></tbody>
+  </table>
+</div>
+
+<div id="confirmOverlay" hidden>
+  <p id="confirmMsg"></p>
+  <button id="btnConfirmYes">確定</button>
+  <button id="btnConfirmNo">取消</button>
+</div>
+
+</body>
+</html>

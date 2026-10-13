@@ -1,0 +1,133 @@
+/* ===== ABC5 響應視覺主題 (HTML5) ===== */
+[hidden]{ display:none !important; }
+:root{
+  --bg0:#0d1420; --bg1:#131c2c;
+  --card:#f9fbff; --ink:#1c2b3a;
+  --accent:#0aa6d7; --accent2:#0077a8;
+  --ok:#2fa46b; --bad:#d94b4b; --note:#1d4ed8;
+  --key:#eef1f5; --keyline:#c9cfd8; --keyink:#20242b;
+  --radius:16px;
+}
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family:"Noto Sans SC","Segoe UI",system-ui,-apple-system,sans-serif;
+  background:
+    radial-gradient(120% 90% at 50% -10%, #1b2a44 0%, transparent 55%),
+    linear-gradient(160deg, var(--bg1), var(--bg0) 70%);
+  color:var(--ink);
+  display:flex; flex-direction:column;
+  min-height:100vh;
+  overscroll-behavior:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ---------- 頂欄 ---------- */
+#topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:clamp(6px,1.6vmin,14px) clamp(10px,3vmin,26px);
+  gap:12px;
+}
+.brand{
+  font-weight:800; letter-spacing:.06em;
+  font-size:clamp(14px,2.6vmin,26px);
+  color:#e8eef8;
+  text-shadow:0 2px 6px rgba(0,0,0,.5);
+}
+.toggles{ display:flex; gap:10px; }
+.toggle{
+  font-size:clamp(11px,1.9vmin,18px);
+  padding:.5em 1em; border-radius:999px;
+  background:rgba(255,255,255,.08); color:#cfd8e6;
+  border:1px solid rgba(255,255,255,.18);
+  cursor:pointer; touch-action:manipulation;
+}
+.toggle[data-on="1"]{
+  background:linear-gradient(180deg,var(--accent),var(--accent2));
+  color:#fff; border-color:rgba(255,255,255,.35);
+  box-shadow:0 0 14px rgba(10,166,215,.55);
+}
+
+/* ---------- 主舞台 ---------- */
+#stage{
+  flex:1; display:flex; flex-direction:column;
+  padding:clamp(6px,1.5vmin,16px) clamp(10px,3vmin,26px);
+  gap:clamp(6px,1.5vmin,16px);
+  min-height:60vh;
+}
+canvas{
+  display:block; width:100%;
+  aspect-ratio:16 10;
+  max-height:62vh;
+  border-radius:var(--radius);
+  box-shadow:0 10px 30px rgba(0,0,0,.55), 0 0 2px rgba(120,190,255,.25);
+}
+@media (max-width:640px){
+  canvas{ aspect-ratio:4 3; max-height:52vh; }
+}
+
+/* ---------- 鍵pad ---------- */
+#keypad{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:clamp(4px,1vmin,10px);
+  width:100%;
+}
+.key{
+  min-height:clamp(42px,8.5vmin,84px);
+  display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,3.2vmin,30px);
+  font-weight:700;
+  background:linear-gradient(180deg,#fff,var(--key));
+  color:var(--keyink);
+  border:1px solid var(--keyline);
+  border-radius:clamp(6px,1.2vmin,12px);
+  box-shadow:0 3px 5px rgba(0,0,0,.35);
+  cursor:pointer; touch-action:manipulation;
+  user-select:none;
+}
+.key:active{ transform:translateY(2px) scale(.97); box-shadow:0 1px 2px rgba(0,0,0,.4); }
+.key.op{ background:linear-gradient(180deg,#e6f4fb,#d3ecf7); border-color:#a9cfe2; color:#0b5f86; }
+.key.enter{ background:linear-gradient(180deg,#7fd7ff,var(--accent)); color:#fff; border-color:#086f97;
+  box-shadow:0 3px 10px rgba(10,166,215,.5); }
+.key.top{ font-size:clamp(12px,2.2vmin,20px); min-height:clamp(36px,7vmin,66px); }
+.key.note{ color:var(--note); }
+.key.note.active{ color:#d33; box-shadow:0 0 12px rgba(220,60,60,.5); }
+.key.exit{ color:var(--accent2); }
+
+/* ---------- 紀錄面板 ---------- */
+#dmsg{
+  position:fixed; inset:0; z-index:999;
+  background:rgba(248,250,253,.97);
+  color:var(--ink);
+  padding:clamp(10px,3vmin,28px);
+  overflow:auto;
+  font-size:clamp(12px,2vmin,19px);
+}
+.panelHead{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+#TotalScore{ font-weight:800; font-size:1.3em; color:var(--accent2); }
+#ScoreDataSelect{ min-height:2.4em; min-width:12em; }
+.panelBtn{
+  font-size:1em; padding:.5em 1.2em; border-radius:10px;
+  border:1px solid var(--keyline); cursor:pointer; touch-action:manipulation;
+}
+.panelBtn.danger{ color:var(--bad); border-color:var(--bad); }
+#scoreTable{ width:100%; border-collapse:collapse; margin-top:1em; }
+#scoreTable th{ background:#e4ecf5; font-weight:700; }
+#scoreTable td,#scoreTable th{ padding:.4em .6em; text-align:center; }
+#scoreTable tbody tr:nth-child(even){ background:#f1f5fa; }
+#scoreTable td.bad{ color:var(--bad); }
+
+/* ---------- 確認對話 ---------- */
+#confirmOverlay{
+  position:fixed; inset:0; z-index:1000;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:14px; background:rgba(10,16,26,.82); color:#fff;
+  font-size:clamp(14px,2.6vmin,24px);
+}
+#confirmOverlay button{
+  font-size:1em; padding:.6em 1.6em; border-radius:12px; cursor:pointer;
+  border:1px solid rgba(255,255,255,.4); touch-action:manipulation;
+}
+#confirmOverlay button:first-of-type{ background:var(--accent); color:#fff; }
