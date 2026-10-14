@@ -18,7 +18,7 @@ body{
     linear-gradient(160deg, var(--bg1), var(--bg0) 70%);
   color:var(--ink);
   display:flex; flex-direction:column;
-  min-height:100vh;
+  min-height:100dvh;
   overscroll-behavior:none;
   -webkit-tap-highlight-color:transparent;
 }
@@ -49,22 +49,72 @@ body{
   box-shadow:0 0 14px rgba(10,166,215,.55);
 }
 
-/* ---------- 主舞台 ---------- */
 #stage{
-  flex:1; display:flex; flex-direction:column;
+  flex:1;
+  display:flex;
+  flex-direction:column;
   padding:clamp(6px,1.5vmin,16px) clamp(10px,3vmin,26px);
   gap:clamp(6px,1.5vmin,16px);
-  min-height:60vh;
+  min-height:0;
 }
+
 canvas{
-  display:block; width:100%;
-  aspect-ratio:16 10;
-  max-height:62vh;
+  display:block;
+  width:100%;
+  flex:1;
+  min-height:280px;
   border-radius:var(--radius);
-  box-shadow:0 10px 30px rgba(0,0,0,.55), 0 0 2px rgba(120,190,255,.25);
+  box-shadow:0 10px 30px rgba(0,0,0,.55),
+             0 0 2px rgba(120,190,255,.25);
 }
+
 @media (max-width:640px){
-  canvas{ aspect-ratio:4 3; max-height:52vh; }
+
+  #topbar{
+    flex-direction:column;
+    align-items:stretch;
+    gap:6px;
+    padding:8px;
+  }
+
+  .brand{
+    text-align:center;
+    font-size:18px;
+  }
+
+  .toggles{
+    width:100%;
+  }
+
+  .toggle{
+    flex:1;
+    min-height:44px;
+  }
+
+  #stage{
+    padding:6px;
+    gap:6px;
+  }
+
+  canvas{
+    flex:0 0 58%;
+    min-height:0;
+  }
+
+  #keypad{
+    flex:1;
+    gap:6px;
+  }
+
+  .key{
+    min-height:58px;
+    font-size:24px;
+  }
+
+  .key.top{
+    min-height:44px;
+    font-size:14px;
+  }
 }
 
 /* ---------- 鍵pad ---------- */
@@ -131,3 +181,20 @@ canvas{
   border:1px solid rgba(255,255,255,.4); touch-action:manipulation;
 }
 #confirmOverlay button:first-of-type{ background:var(--accent); color:#fff; }
+
+@media (max-width:420px){
+
+  canvas{
+    flex:0 0 55%;
+  }
+
+  .key{
+    min-height:52px;
+    font-size:20px;
+  }
+
+  .key.top{
+    min-height:40px;
+    font-size:13px;
+  }
+}

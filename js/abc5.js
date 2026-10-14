@@ -798,6 +798,7 @@ function init(){
 
   resizeCanvas();
   window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("orientationchange", resizeCanvas);
 
   bindButtons();
   bindToggles();
